@@ -166,7 +166,10 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     5.	Pull Secret
 
 13. Once downloaded and extracted, copy the openshift-installer, oc & kubectl binary into /usr/local/bin/ directory (Or whatever the $PATH you have configured on your bastion host).
-14. Generate a new ssh key pair on your bastion host keeping all default options. The public key from this key pair will be used inserted in your install-config.yaml file. Your cluster nodes will be injected with this ssh key and you will be able to ssh into them later for any kind of monitoring & troubleshooting!
+
+ADD STEPS TO SHOW EXACTLY HOW I DOWNLOADED AND EXTRACTED THE FILES
+
+15. Generate a new ssh key pair on your bastion host keeping all default options. The public key from this key pair will be inserted in your install-config.yaml file. Your cluster nodes will be injected with this ssh key and you will be able to ssh into them later for any kind of monitoring & troubleshooting.
              
         ssh-keygen
       

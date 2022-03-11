@@ -4,11 +4,11 @@ This guide is intended to walk you through a step-by-step procedure of deploying
 
 We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10.3 up and running seamlessly using the UPI method at no cost at all.
 
-This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the installation process directly.
+This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation) process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
 
 The procedure and steps described in this document have been taken mainly from the official RedHat documentation for OpenShift (https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html) .
 
-Some changes have been made to the original steps described in the official docs. These are mainly the creation of networks, subnetworks, DNS zones, Cloud NATs – for which we will walk you through the steps to be performed on the UI, instead of the CLI. The idea is to make you understand the architecture of the cluster clearly.
+Some changes have been made to the original steps described in the official docs. These are mainly the creation of networks, subnetworks, DNS zones, Cloud NATs – for which we will walk you through the steps to be performed on the UI, instead of the CLI. The idea is to understand how the cluster looks from the ground up.
 
 We will also be skipping the steps of the intermediate service accounts required for worker & master nodes, instead we will be using the same service account that we will be creating initially for authentication and authorization.
 
@@ -46,24 +46,25 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 ## Cluster Specs:
 
-| Node	| CPUs	| Memory/GB	| Disk Size	| OS	| Deployment type	|Subnet|
-|------|------|-----------|-----------|----|-----------------|------|
-| Bastion Host |	2 |	8	| 100Gib |	Ubuntu 18.04 |	Manual |	Master-subnet |
-| Bootstrap Node	| 4	|16	|128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
-| Master 1	| 4	| 16 | 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
-| Master 2 |	4 |	16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
-| Master 3	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
-| Worker 1	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template |	Worker-Subnet |
-| Worker 2	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Worker Subnet |
+| Node	| CPUs	| Memory/GB	| Disk Size	| OS	| Deployment type	|Subnet| Instance Type |
+|------|------|-----------|-----------|----|-----------------|------|---------------|
+| Bastion Host |	2 |	8	| 100Gib |	Ubuntu 18.04 |	Manual |	Master-subnet | e2-standard-2 |
+| Bootstrap Node	| 4	|16	|128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Master 1	| 4	| 16 | 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Master 2 |	4 |	16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Master 3	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Worker 1	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template |	Worker-Subnet | e2-standard-4 |
+| Worker 2	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Worker Subnet | e2-standard-4 |
 
 ## Prerequisites:
 1.	A GCP account.
 2.	The necessary APIs to be enabled as per the documentation here.
 3.	Ensure you have necessary limits/quotas available in the region you wish to deploy your cluster into. 
 4.	Basic Linux administration skills.
-5.	Understanding of IP, routing, reverse proxy (recommended).
-6.	A service account configured with the appropriate privileges to perform the below steps. Note that majority of the commands used in this deployment process were using the gcloud & gsutil CLI binaries. These can be downloaded from here.
-7.	A RedHat account to download the necessary binaries (oc, kubectl & openshift-installer binaries), RedHat coreos and the pull secret from. If you do not have a RedHat account, you can create one here.
+5.	Basic understanding of public cloud platforms like AWS, GCP, Azure.
+6.	Understanding of IP, routing, reverse proxy (recommended).
+7.	A service account configured with the appropriate privileges to perform the below steps. Note that majority of the commands used in this deployment process were using the gcloud & gsutil CLI binaries. These can be downloaded from [here](https://cloud.google.com/sdk/docs/install).
+8.	A RedHat account to download the necessary binaries (oc, kubectl & openshift-installer binaries), RedHat coreos and the pull secret from. If you do not have a RedHat account, you can create one [here](https://www.redhat.com/wapps/ugc/register.html?_flowId=register-flow&_flowExecutionKey=e1s1).
 
 ## Steps:
 
@@ -76,7 +77,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 2. Create a service account under IAM:
    1. Go to **IAM & admin** > **Service Accounts**
    2.	Click on **Create Service Account** and enter the relevant details:
-         1.	Service Account name: *ocp-serviceaccount*
+         1.	Service Account name: *ocp-serviceaccount* (you can use any service account name of your choice)
          2.	Grant access to the necessary roles per the documentation. I have assigned it the **owner** role since I will be using this service account myself. It is however not recommended to grant the ‘owner’ role to the service account for security reasons. Do refer the necessary roles that the service account requires access to.
          3.	Click **Done**.
          4.	Once your service account is created, we need its json key to be used for authentication & authorization of gcp objects creation:
@@ -157,7 +158,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
         sudo apt install wget git -y
     
-12. Download the necessary files & binaries onto the bastion host from your RedHat Cluster Manager login page (you can use the wget tool for this):
+12. Download the necessary files & binaries onto the bastion host from your [RedHat Cluster Manager](https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth?client_id=cloud-services&redirect_uri=https%3A%2F%2Fconsole.redhat.com%2F&state=1b3b6ba7-b426-4319-9197-8d4be1f14e5f&response_mode=fragment&response_type=code&scope=openid&nonce=72beef5c-277a-4dd7-a840-721e8eddbcac) login page (you can use the wget tool to directly download onto your bastion host, or simply download them and copy over to your bastion host using scp):
     1. openshift-installer binary
     2. oc binary
     3.	kubectl binary
@@ -179,7 +180,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 17. Copy the sample-install-config.yaml file into the installation directory.
 
-        cp example-install-config.yaml install_dir/install-config.yaml
+        cp sample-install-config.yaml install_dir/install-config.yaml
         
 18. Edit the copied install-config.yaml as per your needs. The important changes are:
     1. Base Domain value (Needs to be the same as specified in your private DNS zone)
@@ -245,9 +246,9 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
       
     These environment variables will be required for the upcoming commands as they call these variables in them, so be sure to set these.
 
-    Ensure you copy the .py files to your current working directory, as these will be referenced in the upcoming commands.
+    Ensure you copy the .py files to your current working directory from the git repository, as these will be referenced in the upcoming commands.
 
-24. Now we create the internal loadbalancer component that will be used for api-server related communication by the cluster nodes. The following commands will create the load balancer, its corresponding health check components, as well as the Backend instance groups into which the master nodes will be put into at the time of Master nodes creation in a later step.
+24. Now we create the internal loadbalancer component that will be used for api-server related communication by the cluster nodes. The following commands will create the load balancer, its corresponding health check component, as well as the Backend empty instance groups into which the master nodes will be put into at the time of Master nodes creation in a later step.
     1. Create the .yaml file
        
            cat <<EOF >02_infra.yaml
@@ -287,7 +288,9 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
         export MASTER_SERVICE_ACCOUNT=(`gcloud iam service-accounts list --filter "email~^ocp-serviceaccount@${PROJECT_NAME}." --format json | jq -r '.[0].email'`)
         export WORKER_SERVICE_ACCOUNT=(`gcloud iam service-accounts list --filter "email~^ocp-serviceaccount@${PROJECT_NAME}." --format json | jq -r '.[0].email'`)
-        
+     
+     If the above commands do not set the correct service account email ENV variable, you can try running **gcloud iam service-accounts list** , copy the email address for your service account and set it as the environment variable for both MASTER_SERVICE_ACCOUNT & WORKER_SERVICE_ACCOUNT.
+     
 28. Now let’s create 2 google cloud buckets. One will be for storing the bootstrap.ign file for the bootstrap node, and the other will be the one to store the RedHat Coreos image that the cluster nodes will pull to boot up from.
     1. Bucket to store bootstrap.ign file.
     
@@ -337,7 +340,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
            gcloud deployment-manager deployments create ${INFRA_ID}-bootstrap --config 04_bootstrap.yaml
            
         
-32. Now we need to manually add the bootstrap node to the new empty instance group and add it as part of the internal load balancer we created earlier. This is mandatory as an initial temporary bootstrap cluster is hosted on the bootstrap node.
+32. Now we need to manually add the bootstrap node to the new empty instance group and add it as part of the internal load balancer we created earlier. This is mandatory as the initial temporary bootstrap cluster is hosted on the bootstrap node.
 
         gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-bootstrap-instance-group --zone=${ZONE_0} --instances=${INFRA_ID}-bootstrap
         gcloud compute backend-services add-backend ${INFRA_ID}-api-internal-backend-service --region=${REGION} --instance-group=${INFRA_ID}-bootstrap-instance-group --instance-group-zone=${ZONE_0}
@@ -383,8 +386,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
         gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_2}-instance-group --zone=${ZONE_2} --instances=${INFRA_ID}-master-2
         
 35. At this point we must now wait for the bootstrap process to complete. You can now monitor the bootstrap process:
-    1. ssh into your bootstrap node and run journalctl -b -f -u release-image.service -u bootkube.service . Upon bootstrap process completion, the output of this command should stop at a message that looks something like systemd[1]: bootkube.service: Succeeded. 
-    2. You can also ssh into the master nodes and run a sudo crictl ps to monitor the container creation of the various OCP components. Sometimes the kube-apiserver & etcd related components often fluctuate and keep flapping. Do not panic and allow some time for these to stabilize. You can also perform a rolling reboot of your master nodes if you wish to.
+    1. ssh into your bootstrap node and run `journalctl -b -f -u release-image.service -u bootkube.service` . Upon bootstrap process completion, the output of this command should stop at a message that looks something like `systemd[1]: bootkube.service: Succeeded`. 
+    2. You can also ssh into the master nodes and run a sudo crictl ps to monitor the container creation of the various OCP components. Sometimes the kube-apiserver & etcd related components fluctuate and keep flapping. Do not panic and allow some time for these to stabilize. You can also perform a rolling reboot of your master nodes if you wish to.
 
 36. Once your bootstrap process completes, you can remove your bootstrap components:
 
@@ -485,11 +488,11 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     8. Click **‘Create’**.
     9. From the loadbalancers list, select the name of the newly created loadbalancer and take note of the Frontend IP address. This will be the IP address that will be used for our new DNS record set in the next step.
 
-42. Now let’s add a new DNS record set for the wildcard of *.apps.<cluster name>.<base domain> to our private DNS zone. This DNS record is very important and is required for your ingress cluster operator to be able to listen and receive ingress traffic from the Master nodes. At this time, the console pods & authentication pods on the master nodes try to repeatedly connect with the ingress (router) pods to establish a legit route for their respective path endpoints. Because of the absence of this record set in step 37 above, some of the cluster operators remain unavailable.
+42. Now let’s add a new DNS record set for the wildcard of `*.apps.<cluster name>.<base domain>` to our private DNS zone. This DNS record is very important and is required for your ingress cluster operator to be able to listen and receive ingress traffic from the Master nodes. At this time, the console pods & authentication pods on the master nodes try to repeatedly connect with the ingress (router) pods to establish a legit route for their respective path endpoints. Because of the absence of this record set in step 37 above, some of the cluster operators remain unavailable.
     1. Go to **‘Network Services’** > **‘Cloud DNS’**
     2. Select the private DNS zone we created earlier.
     3. Click on **‘Add Record Set’**.
-    4. Enter the DNS name as *.apps . The clustername & basedomain should get auto-filled.
+    4. Enter the DNS name as `*.apps` . The clustername & basedomain should get auto-filled.
     5. Set TTL value to 1 and TTL Unit to minutes.
     6. Resource Record Type: A
     7. Routing Policy: Default Record Type
@@ -497,7 +500,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     9. Click **‘Create’**.
  
  
-Once this is done, run a **watch oc get co**, and you should start seeing all your Cluster Operators becoming Available.
+Once this is done, run a `watch oc get co`, and you should start seeing all your Cluster Operators becoming Available.
  
 ### Configuring a Reverse Proxy for external UI access
  
@@ -524,8 +527,8 @@ Once this is done, run a **watch oc get co**, and you should start seeing all yo
                server hamzacluster.openshift.com 10.1.10.8 # Note that in this last line, the IP address 10.1.10.8 should be replaced by your loadbalancer IP address.
     
     4. Once the haproxy is configured, restart it: systemctl restart haproxy.
-    5.	Run an **oc get routes -A** command to get the Console URL through which you can access.
-    6. On your local machine, add an entry in the /etc/hosts file (Linux & Mac Users) that points to the Public IP of your bastion host for the name address of console-openshift-console.apps.(clustername).(basedomain) & oauth-openshift.apps.(clustername).(basedomain). For Windows Users, you might have to add the entry into c:\Windows\System32\Drivers\etc\hosts.
+    5.	Run an `oc get routes -A` command to get the Console URL through which you can access.
+    6. On your local machine, add an entry in the /etc/hosts file (Linux & Mac Users) that points to the Public IP of your bastion host for the name address of console-openshift-console.apps.(clustername).(basedomain) & oauth-openshift.apps.(clustername).(basedomain). For Windows Users, you might have to add the entry into `c:\Windows\System32\Drivers\etc\hosts`.
 
        Something like :
 

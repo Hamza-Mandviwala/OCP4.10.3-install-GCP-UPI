@@ -189,7 +189,7 @@ ADD STEPS TO SHOW EXACTLY HOW I DOWNLOADED AND EXTRACTED THE FILES
     1. Base Domain value (Needs to be the same as specified in your private DNS zone)
     2. Cluster name (Needs to be the same as specified in your private DNS zone)
     3. Pull Secret (To be taken from your RedHat account portal)
-    4. SSH key (The one you created in step 14 above. The public key is present at ~/.ssh/id_rsa.pub on most Linux machines)
+    4. SSH key (The one you created in step 14 above. The public key is present at `~/.ssh/id_rsa.pub` on most Linux machines)
     5. GCP platform specific parameters like project ID, region will have to specified per your choice. In this exercise, we have deployed our cluster in asia-northeast1 as it is the closest to my geographical location and has the necessary limits to host the cluster.
 
 19. Export the GCP application credentials. This is the service account key that will be used for creating the remaining cluster components.

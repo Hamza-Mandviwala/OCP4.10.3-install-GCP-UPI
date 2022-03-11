@@ -22,7 +22,7 @@ We will also be skipping the steps of the intermediate service accounts required
     * Setting up GCP infra components
 
 ## Basic Flow and Summary of deployment steps
-![picture alt] /Users/hamzawork/Desktop/Screenshot\ 2022-03-11\ at\ 11.46.16\ AM.png
+![picture alt] /Users/hamzawork/Desktop/flowdiagram.png
 
 
 

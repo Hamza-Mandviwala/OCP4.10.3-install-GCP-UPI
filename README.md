@@ -13,17 +13,21 @@ Some changes have been made to the original steps described in the official docs
 We will also be skipping the steps of the intermediate service accounts required for worker & master nodes, instead we will be using the same service account that we will be creating initially for authentication and authorization.
 
 ## Contents ##
-* Basic Flow and Summary of deployment steps
-* Final Architecture and Cluster Layout (Post Installation)
-* Let’s Get Started!
-  * Cluster Specs
-  * Prerequisites
-  * Steps:
-    * Setting up GCP infra components
+* [Basic Flow and Summary of deployment steps](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#basic-flow-and-summary-of-deployment-steps)
+* [Final Architecture and Cluster Layout (Post Installation)](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#final-architecture-and-cluster-layout-post-installation)
+* [Let’s Get Started!](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#lets-get-started)
+  * [Cluster Specs](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#cluster-specs)
+  * [Prerequisites](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#prerequisites)
+  * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#steps)
+    * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
+    * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)
+    * [Creating a second Internal Loadbalancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic) (Mandatory step for cluster install to reach completion)
+    * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
+
 
 ## Basic Flow and Summary of deployment steps
-![My Image](/Users/hamzawork/Desktop/flowdiagram.png)
 
+<img width="1792" alt="flowdiagram" src="https://user-images.githubusercontent.com/53118271/157832070-351606fa-92fd-45b7-96a2-e3fa7d83ddb0.png">
 
 The above diagram illustrates the basic flow in which we will be deploying our OCP 4.10.3 cluster on GCP. We first create a bastion host, and from that host, we will be running all the necessary commands to setup the bootstrap node, followed by the Master nodes, and finally the worker nodes in a different subnet.
 
@@ -35,21 +39,24 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 ## Final Architecture and Cluster Layout (Post Installation)
 
-![My Image](/Users/hamzawork/Desktop/finaldiagram.png)
+<img width="1012" alt="finaldiagram" src="https://user-images.githubusercontent.com/53118271/157832353-7b5ffecd-9738-4be7-b424-0c706a928beb.png">
 
-## Let’s Get Started
 
-### Cluster Specs:
-Node	CPUs	Memory/GB	Disk Size	OS	Deployment type	Subnet
-Bastion Host	2	8	100Gib	Ubuntu 18.04	Manual	Master-subnet
-Bootstrap Node	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Master-subnet
-Master 1	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Master-subnet
-Master 2	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Master-subnet
-Master 3	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Master-subnet
-Worker 1	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Worker-Subnet
-Worker 2	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Worker Subnet
+# Let’s Get Started
 
-### Prerequisites:
+## Cluster Specs:
+
+| Node	| CPUs	| Memory/GB	| Disk Size	| OS	| Deployment type	|Subnet|
+|------|------|-----------|-----------|----|-----------------|------|
+| Bastion Host |	2 |	8	| 100Gib |	Ubuntu 18.04 |	Manual |	Master-subnet |
+| Bootstrap Node	| 4	|16	|128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
+| Master 1	| 4	| 16 | 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
+| Master 2 |	4 |	16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
+| Master 3	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet |
+| Worker 1	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template |	Worker-Subnet |
+| Worker 2	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Worker Subnet |
+
+## Prerequisites:
 1.	A GCP account.
 2.	The necessary APIs to be enabled as per the documentation here.
 3.	Ensure you have necessary limits/quotas available in the region you wish to deploy your cluster into. 
@@ -58,7 +65,9 @@ Worker 2	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Worker Subnet
 6.	A service account configured with the appropriate privileges to perform the below steps. Note that majority of the commands used in this deployment process were using the gcloud & gsutil CLI binaries. These can be downloaded from here.
 7.	A RedHat account to download the necessary binaries (oc, kubectl & openshift-installer binaries), RedHat coreos and the pull secret from. If you do not have a RedHat account, you can create one here.
 
-### Steps:
+## Steps:
+
+### Creating GCP Infra components
 
 1. Create a GCP project inside your GCP console. I have a project named ‘ocp-project’ created already, and this will be used to host the OCP 4.10.3 cluster.
    1. Go to **IAM & Admin** > **Create a Project**
@@ -137,6 +146,8 @@ Worker 2	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Worker Subnet
    5.	Under **‘Security’** > **‘Manage Access’** -  ensure you add a ssh public key that allows you to ssh into the bastion host from your local machine.
    6.	Click **‘Create’**.
 
+### OpenShift Installation 
+
 9. SSH into the bastion host from your local machine, and switch to the root user.
         
        ssh -i ~/.ssh/id_rsa username@<Public IP of bastion host>
@@ -208,9 +219,334 @@ Worker 2	4	16	128 Gib	RedHat CoreOS	Deployment Manager Template	Worker Subnet
 
 22. Now let’s create the ignition config files.
 
-          openshift-install create ignition-configs --dir install_dir/
+        openshift-install create ignition-configs --dir install_dir/
           
-23. 
+23. Set the environment variables for your environment. Please set the values as per your needs.
+
+        export BASE_DOMAIN=openshift.com
+        export BASE_DOMAIN_ZONE_NAME=ocp-private-zone
+        export NETWORK=ocp-network
+        export MASTER_SUBNET=master-subnet
+        export WORKER_SUBNET=worker-subnet
+        export NETWORK_CIDR='10.1.0.0/16'
+        export MASTER_SUBNET_CIDR='10.1.10.0/24'
+        export WORKER_SUBNET_CIDR='10.1.20.0/24'
+        export KUBECONFIG=/root/install_dir/auth/kubeconfig 
+        export CLUSTER_NAME=`jq -r .clusterName /root/install_dir/metadata.json`
+        export INFRA_ID=`jq -r .infraID /root/install_dir/metadata.json`
+        export PROJECT_NAME=`jq -r .gcp.projectID /root/install_dir/metadata.json`
+        export REGION=`jq -r .gcp.region /root/install_dir/metadata.json`
+        export CLUSTER_NETWORK=(`gcloud compute networks describe ${NETWORK} --format json | jq -r .selfLink`)
+        export CONTROL_SUBNET=(`gcloud compute networks subnets describe ${MASTER_SUBNET} --region=${REGION} --format json | jq -r .selfLink`)
+        export COMPUTE_SUBNET=(`gcloud compute networks subnets describe ${WORKER_SUBNET} --region=${REGION} --format json | jq -r .selfLink`)
+        export ZONE_0=(`gcloud compute regions describe ${REGION} --format=json | jq -r .zones[0] | cut -d "/" -f9`)
+        export ZONE_1=(`gcloud compute regions describe ${REGION} --format=json | jq -r .zones[1] | cut -d "/" -f9`)
+        export ZONE_2=(`gcloud compute regions describe ${REGION} --format=json | jq -r .zones[2] | cut -d "/" -f9`)
+      
+    These environment variables will be required for the upcoming commands as they call these variables in them, so be sure to set these.
+
+    Ensure you copy the .py files to your current working directory, as these will be referenced in the upcoming commands.
+
+24. Now we create the internal loadbalancer component that will be used for api-server related communication by the cluster nodes. The following commands will create the load balancer, its corresponding health check components, as well as the Backend instance groups into which the master nodes will be put into at the time of Master nodes creation in a later step.
+    1. Create the .yaml file
+       
+           cat <<EOF >02_infra.yaml
+           imports:
+           - path: 02_lb_int.py 
+           resources: 
+           - name: cluster-lb-int
+             type: 02_lb_int.py
+             properties:
+               cluster_network: '${CLUSTER_NETWORK}'
+               control_subnet: '${CONTROL_SUBNET}' 
+               infra_id: '${INFRA_ID}'
+               region: '${REGION}'
+               zones: 
+               - '${ZONE_0}'
+               - '${ZONE_1}'
+               - '${ZONE_2}'
+           EOF
+    2. Create the corresponding GCP object:
+    
+           gcloud deployment-manager deployments create ${INFRA_ID}-infra --config 02_infra.yaml
+           
+           
+25. We now need to get the Cluster IP. This is basically the loadbalancer IP that we created in the previous step. This IP is used as the Host IP addresses for the record sets that will be put into our private DNS zone. 
+
+        export CLUSTER_IP=(`gcloud compute addresses describe ${INFRA_ID}-cluster-ip --region=${REGION} --format json | jq -r .address`)
+        
+26. We now create the required record sets for apiserver communication among the cluster nodes.
+
+        if [ -f transaction.yaml ]; then rm transaction.yaml; fi
+        gcloud dns record-sets transaction start --zone ocp-private-zone
+        gcloud dns record-sets transaction add ${CLUSTER_IP} --name api.${CLUSTER_NAME}.${BASE_DOMAIN}. --ttl 60 --type A --zone ocp-private-zone
+        gcloud dns record-sets transaction add ${CLUSTER_IP} --name api-int.${CLUSTER_NAME}.${BASE_DOMAIN}. --ttl 60 --type A --zone ocp-private-zone
+        gcloud dns record-sets transaction execute --zone ocp-private-zone
+       
+27. Let’s export the service account emails as these will be called inside the deployment manager templates of our master & worker nodes. In our demo, we will be using the same service account we created earlier:
+
+        export MASTER_SERVICE_ACCOUNT=(`gcloud iam service-accounts list --filter "email~^ocp-serviceaccount@${PROJECT_NAME}." --format json | jq -r '.[0].email'`)
+        export WORKER_SERVICE_ACCOUNT=(`gcloud iam service-accounts list --filter "email~^ocp-serviceaccount@${PROJECT_NAME}." --format json | jq -r '.[0].email'`)
+        
+28. Now let’s create 2 google cloud buckets. One will be for storing the bootstrap.ign file for the bootstrap node, and the other will be the one to store the RedHat Coreos image that the cluster nodes will pull to boot up from.
+    1. Bucket to store bootstrap.ign file.
+    
+           gsutil mb gs://${INFRA_ID}-bootstrap-ignition
+           gsutil cp install_dir/bootstrap.ign gs://${INFRA_ID}-bootstrap-ignition/
+           
+    2. Bucket to store RedHat Coreos file.
+
+           gsutil mb gs://rhcosbucket/
+           gsutil cp rhcos-4.10.3-x86_64-gcp.x86_64.tar.gz gs://rhcosbucket/
+           export IMAGE_SOURCE=gs://rhcosbucket/rhcos-4.10.3-x86_64-gcp.x86_64.tar.gz
+           gcloud compute images create "${INFRA_ID}-rhcos-image" --source-uri="${IMAGE_SOURCE}"
+           
+29. Let’s set the CLUSTER_IMAGE env to be called later by the node creation commands.
+
+        export CLUSTER_IMAGE=(`gcloud compute images describe ${INFRA_ID}-rhcos-image --format json | jq -r .selfLink`)
+
+30. Let’s set the BOOTSTRAP_IGN env to be called in the next step of bootstrap node creation.
+       
+        export BOOTSTRAP_IGN=`gsutil signurl -d 1h service-account-key.json gs://${INFRA_ID}-bootstrap-ignition/bootstrap.ign | grep "^gs:" | awk '{print $5}'`
+
+31. Now we create the bootstrap node itself using the relevant Deployment Manager template The below commands will create the bootstrap node, a public IP for it, and an empty instance group for the bastion host:
+    1. Create the .yaml file that sets the metadata for the bootstrap node:
+    
+           cat <<EOF >04_bootstrap.yaml
+           imports:
+           - path: 04_bootstrap.py
+
+           resources:
+           - name: cluster-bootstrap
+             type: 04_bootstrap.py
+             properties:
+               infra_id: '${INFRA_ID}' 
+               region: '${REGION}' 
+               zone: '${ZONE_0}' 
+
+               cluster_network: '${CLUSTER_NETWORK}' 
+               control_subnet: '${CONTROL_SUBNET}' 
+               image: '${CLUSTER_IMAGE}' 
+               machine_type: 'e2-standard-4' 
+               root_volume_size: '128' 
+
+               bootstrap_ign: '${BOOTSTRAP_IGN}' 
+           EOF
+    2. Run the command to create the google cloud object for the bootstrap node.
+
+           gcloud deployment-manager deployments create ${INFRA_ID}-bootstrap --config 04_bootstrap.yaml
+           
+        
+32. Now we need to manually add the bootstrap node to the new empty instance group and add it as part of the internal load balancer we created earlier. This is mandatory as an initial temporary bootstrap cluster is hosted on the bootstrap node.
+
+        gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-bootstrap-instance-group --zone=${ZONE_0} --instances=${INFRA_ID}-bootstrap
+        gcloud compute backend-services add-backend ${INFRA_ID}-api-internal-backend-service --region=${REGION} --instance-group=${INFRA_ID}-bootstrap-instance-group --instance-group-zone=${ZONE_0}
+
+33. We now proceed with the master nodes creation. Note that we are using instance types e2-standard-4, but you can use any other type which suits you best. However please ensure the type you choose accommodates at least 16GB Memory and 4 vCPUs, as OCP will not be able to run the required containers on lower spec instance types. I have tried many times and it has usually failed or has been unstable.
+    1. Set the env variable for the master ignition config file
+
+           export MASTER_IGNITION=`cat install_dir/master.ign`
+
+    2. Create the .yaml file that sets the metadata for the master nodes:
+
+           cat <<EOF >05_control_plane.yaml
+           imports:
+           - path: 05_control_plane.py
+
+           resources:
+           - name: cluster-control-plane
+             type: 05_control_plane.py
+             properties:
+               infra_id: '${INFRA_ID}' 
+               zones: 
+               - '${ZONE_0}'
+               - '${ZONE_1}'
+               - '${ZONE_2}'
+
+               control_subnet: '${CONTROL_SUBNET}' 
+               image: '${CLUSTER_IMAGE}' 
+               machine_type: 'e2-standard-4' 
+               root_volume_size: '128'
+               service_account_email: '${MASTER_SERVICE_ACCOUNT}' 
+
+               ignition: '${MASTER_IGNITION}' 
+           EOF
+      
+      3. Run the command to create the google cloud object for the master nodes:
+    
+        gcloud deployment-manager deployments create ${INFRA_ID}-control-plane --config 05_control_plane.yaml
+        
+34. Once your master nodes have been deployed, we also need to add these to their respective instance groups that were created earlier in the loadbalancer creation step:
+
+        gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_0}-instance-group --zone=${ZONE_0} --instances=${INFRA_ID}-master-0
+        gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_1}-instance-group --zone=${ZONE_1} --instances=${INFRA_ID}-master-1
+        gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_2}-instance-group --zone=${ZONE_2} --instances=${INFRA_ID}-master-2
+        
+35. At this point we must now wait for the bootstrap process to complete. You can now monitor the bootstrap process:
+    1. ssh into your bootstrap node and run journalctl -b -f -u release-image.service -u bootkube.service . Upon bootstrap process completion, the output of this command should stop at a message that looks something like systemd[1]: bootkube.service: Succeeded. 
+    2. You can also ssh into the master nodes and run a sudo crictl ps to monitor the container creation of the various OCP components. Sometimes the kube-apiserver & etcd related components often fluctuate and keep flapping. Do not panic and allow some time for these to stabilize. You can also perform a rolling reboot of your master nodes if you wish to.
+
+36. Once your bootstrap process completes, you can remove your bootstrap components:
+
+        gcloud compute backend-services remove-backend ${INFRA_ID}-api-internal-backend-service --region=${REGION} --instance-group=${INFRA_ID}-bootstrap-instance-group --instance-group-zone=${ZONE_0}
+        gsutil rm gs://${INFRA_ID}-bootstrap-ignition/bootstrap.ign
+        gsutil rb gs://${INFRA_ID}-bootstrap-ignition
+        gcloud deployment-manager deployments delete ${INFRA_ID}-bootstrap
+
+37. Now we are good to create our worker nodes. Note that if you run an oc get co command from your bastion host at this time, you will still see a few operators unavailable, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes, and only then will a route to your console will be created, and eventually your authentication operator would also reach completion.
+    1. Set the env variable for the worker ignition config file.
+
+           export WORKER_IGNITION=`cat install_dir/worker.ign`
+
+    2. Create the .yaml file that sets the metadata for the worker nodes
+
+           cat <<EOF >06_worker.yaml
+           imports:
+           - path: 06_worker.py
+
+           resources:
+           - name: 'worker-0' 
+             type: 06_worker.py
+             properties:
+               infra_id: '${INFRA_ID}' 
+               zone: '${ZONE_0}' 
+               compute_subnet: '${COMPUTE_SUBNET}' 
+               image: '${CLUSTER_IMAGE}' 
+               machine_type: 'e2-standard-4' 
+               root_volume_size: '128'
+               service_account_email: '${WORKER_SERVICE_ACCOUNT}' 
+               ignition: '${WORKER_IGNITION}' 
+           - name: 'worker-1'
+             type: 06_worker.py
+             properties:
+               infra_id: '${INFRA_ID}' 
+               zone: '${ZONE_1}' 
+               compute_subnet: '${COMPUTE_SUBNET}' 
+               image: '${CLUSTER_IMAGE}' 
+               machine_type: 'e2-standard-4' 
+               root_volume_size: '128'
+               service_account_email: '${WORKER_SERVICE_ACCOUNT}' 
+               ignition: '${WORKER_IGNITION}' 
+           EOF
+
+     3. Run the command to create the google cloud object for the worker node
+
+            gcloud deployment-manager deployments create ${INFRA_ID}-worker --config 06_worker.yaml
+
+38. With the node deployments created, there should be 2 CSRs in a pending state, we need to approve these. Once you approve the first 2, there will be an additional 2 CSRs generated by those nodes, therefore, 4 CSRs (in sequence of 2 CSRs each) in total that we must approve.
+
+        oc get csr
+        oc adm certificate approve <csr name>
+
+39. Now if you run oc get nodes, you should be able to see your worker nodes too. 
+
+### Creating a second Internal Loadbalancer for worker plane traffic
+
+40. We will now create 2 new unmanaged instance groups for each of our worker nodes. This is because later we will be creating another internal load balancer that will forward the worker node specific traffic.
+    1. Go to **‘Compute Engine’** > **‘Instance Groups’**
+    2. Click on **‘Create Instance Group’** and select **‘New unmanaged instance group’**
+    3. Enter the relevant details like name, region & zone. Ensure region & zone is the same as where your worker nodes reside.
+    4. For networking options:
+       1.	Network: ocp-network (Name of your network that hosts the cluster)
+       2. Subnetwork: worker-subnet (needs to be the name of your worker nodes subnet)
+       3. VM Instances: Select one of the worker nodes from the drop-down list.
+    5. Click **‘Create’**
+    6.	Repeat steps a, b, c, d & e for creating a second instance group that will have the second worker node in it.
+
+41. Now we create the other internal load balancer that will have the 2 instance groups we created in the previous step as backends:
+    1. Go to **‘Network Services’** > **‘Loadbalancing’**
+    2. Click on **‘Create Load Balancer’** > Select **‘TCP load balancing’**
+    3. Select the following options:
+       1. Internet facing or Internal only: Only Between my VMs
+       2. Multiple regions or Single region: Single Region 
+       3. Click ‘Continue’
+    4. Enter the name & region.
+    5. For the network, select your network name to which your VM Instances are connected. (‘ocp-network ‘in our exercise)
+    6. For **Backend Configuration**:
+       1. Select one of the instance groups we created in the previous step, click Done.
+       2. Add another backend by selecting the second instance group we created in the previous step, click Done.
+       3.	For the HealthCheck, click on **‘Create a Health Check’** and:
+              1. Enter the name e.g  wildcard-apps-healthcheck 
+              2. Scope: Regional
+              3. Protocol: TCP
+              4. Port: 443
+              5. Proxy Protocol: None
+              6. Logs: Off
+              7. Leave the Health Criteria parameters to the default.
+              8. Click Save.
+    7. For the **Frontend Configuration**:
+       1. You can give it a name if you want to, we have left it blank for this exercise.
+       2. Subnetwork: master-subnet
+       3. Internal IP – Purpose: Shared
+              1. IP Address: Ephemeral (Automatic)
+       4. Ports: All
+       5. Global Access: Disable
+       6. Click **Done**.
+    8. Click **‘Create’**.
+    9. From the loadbalancers list, select the name of the newly created loadbalancer and take note of the Frontend IP address. This will be the IP address that will be used for our new DNS record set in the next step.
+
+42. Now let’s add a new DNS record set for the wildcard of *.apps.<cluster name>.<base domain> to our private DNS zone. This DNS record is very important and is required for your ingress cluster operator to be able to listen and receive ingress traffic from the Master nodes. At this time, the console pods & authentication pods on the master nodes try to repeatedly connect with the ingress (router) pods to establish a legit route for their respective path endpoints. Because of the absence of this record set in step 37 above, some of the cluster operators remain unavailable.
+    1. Go to **‘Network Services’** > **‘Cloud DNS’**
+    2. Select the private DNS zone we created earlier.
+    3. Click on **‘Add Record Set’**.
+    4. Enter the DNS name as *.apps . The clustername & basedomain should get auto-filled.
+    5. Set TTL value to 1 and TTL Unit to minutes.
+    6. Resource Record Type: A
+    7. Routing Policy: Default Record Type
+    8. IP Address: 10.1.20.11 (This needs to be the IP of the loadbalancer you created in the previous step)
+    9. Click **‘Create’**.
+ 
+ 
+Once this is done, run a **watch oc get co**, and you should start seeing all your Cluster Operators becoming Available.
+ 
+### Configuring a Reverse Proxy for external UI access
+ 
+43. Now that our cluster is entirely setup, we still cannot access the UI externally since it is a private cluster and only configured to expose it internally within the GCP network. For this, we will configure a reverse proxy on our bastion host:
+    1. Install the haproxy package
+                
+           sudo apt install haproxy -y
+  
+    2. Open the haproxy.cfg file to make some configuration changes
+
+           vi /etc/haproxy/haproxy.cfg
+ 
+    3. Add the following section in the end:
+
+           frontend localhost
+               bind *:80
+               bind *:443
+               option tcplog
+               mode tcp
+               default_backend servers
+ 
+           backend servers
+               mode tcp
+               server hamzacluster.openshift.com 10.1.10.8 # Note that in this last line, the IP address 10.1.10.8 should be replaced by your loadbalancer IP address.
+    
+    4. Once the haproxy is configured, restart it: systemctl restart haproxy.
+    5.	Run an **oc get routes -A** command to get the Console URL through which you can access.
+    6. On your local machine, add an entry in the /etc/hosts file (Linux & Mac Users) that points to the Public IP of your bastion host for the name address of console-openshift-console.apps.(clustername).(basedomain) & oauth-openshift.apps.(clustername).(basedomain). For Windows Users, you might have to add the entry into c:\Windows\System32\Drivers\etc\hosts.
+
+       Something like :
+
+           <Bastion host Public IP> console-openshift-console.apps.hamzacluster.openshift.com oauth-openshift.apps.hamzacluster.openshift.com
+
+    7. You should now be able to access the OCP console UI through your browser using https://console-openshift-console.apps.(clustername).(basedomain) .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -123,8 +123,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
              1. Source: Custom
              2. Subnets: master-subnet
              3. NAT IP Addresses: Automatic
-         6. Click **Create** .
-         7. Repeat steps a, b & c again for the worker-subnet, and just ensure to change the Gateway Name to ocp-nat-worker-gw for example. And ensure both Cloud Networks are connected to the same Cloud Router.
+   3. Click **Create** .
+   4. Repeat steps i, ii & iii again for the worker-subnet, and just ensure to change the Gateway Name to ocp-nat-worker-gw for example. And ensure both Cloud Networks are connected to the same Cloud Router.
 
 7. Create a private DNS zone from the GCP UI:
    1. Go to **‘Network Services’** > **‘Cloud DNS’**
@@ -454,7 +454,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
        2. Subnetwork: worker-subnet (needs to be the name of your worker nodes subnet)
        3. VM Instances: Select one of the worker nodes from the drop-down list.
     5. Click **‘Create’**
-    6.	Repeat steps a, b, c, d & e for creating a second instance group that will have the second worker node in it.
+    6.	Repeat steps i., ii., iii.,iv. & v. for creating a second instance group that will have the second worker node in it.
 
 41. Now we create the other internal load balancer that will have the 2 instance groups we created in the previous step as backends:
     1. Go to **‘Network Services’** > **‘Loadbalancing’**

@@ -563,15 +563,15 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
  
            backend servers
                mode tcp
-               server hamzacluster.openshift.com 10.1.10.8 # Please change the IP address to the IP address of your Internal worker plane Loadbalancer, and the DNS name to your private DNS name
+               server hamzacluster.openshift.com 10.1.10.9 # Please change the IP address to the IP address of your Internal worker plane Loadbalancer, and the DNS name to your private DNS name
     
     4. Once the haproxy is configured, restart it: `systemctl restart haproxy`.
     5.	Run an `oc get routes -A` command to get the Console URL through which you can access.
-    6. On your local machine, add an entry in the `/etc/hosts` file (Linux & Mac Users) that points to the Public IP of your bastion host for the name address of `console-openshift-console.apps.<clustername>.<basedomain>` & `oauth-openshift.apps.<clustername>.<basedomain>`. For Windows Users, you might have to add the entry into `c:\Windows\System32\Drivers\etc\hosts`.
+    6. On your local machine, add an entry in the `/etc/hosts` file (Linux & Mac Users) that points to the Public IP of your bastion host for the name address of all the OpenShift Services that have been created e.g prometheus, grafana, alert manager etc. For Windows Users, you might have to add the entry into `c:\Windows\System32\Drivers\etc\hosts`.
 
        Something like :
 
-           <Bastion host Public IP> console-openshift-console.apps.hamzacluster.openshift.com oauth-openshift.apps.hamzacluster.openshift.com
+           <Bastion host Public IP> downloads-openshift-console.apps.hamzacluster.openshift.com alertmanager-main-openshift-monitoring.apps.hamzacluster.openshift.com grafana-openshift-monitoring.apps.hamzacluster.openshift.com prometheus-k8s-openshift-monitoring.apps.hamzacluster.openshift.com thanos-querier-openshift-monitoring.apps.hamzacluster.openshift.com console-openshift-console.apps.hamzacluster.openshift.com oauth-openshift.apps.hamzacluster.openshift.com
 
     7. You should now be able to access the OCP console UI through your browser using `https://console-openshift-console.apps.<clustername>.<basedomain>` .
 

@@ -39,7 +39,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 ## Final Architecture and Cluster Layout (Post Installation)
 
-<img width="1012" alt="finaldiagram" src="https://user-images.githubusercontent.com/53118271/157832353-7b5ffecd-9738-4be7-b424-0c706a928beb.png">
+   <img width="753" alt="Screenshot 2022-03-12 at 5 22 32 PM" src="https://user-images.githubusercontent.com/53118271/158012264-5c40b2b2-892c-43f2-87de-6f8159f56c51.png">
+
 
 
 # Let’s Get Started
@@ -63,8 +64,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 4.	Basic Linux administration skills.
 5.	Basic understanding of public cloud platforms like AWS, GCP, Azure.
 6.	Understanding of IP, routing, reverse proxy (recommended).
-7.	A service account configured with the appropriate privileges to perform the below steps. Note that majority of the commands used in this deployment process were using the gcloud & gsutil CLI binaries. These can be downloaded from [here](https://cloud.google.com/sdk/docs/install).
-8.	A RedHat account to download the necessary binaries (oc, kubectl & openshift-installer binaries), RedHat coreos and the pull secret from. If you do not have a RedHat account, you can create one [here](https://www.redhat.com/wapps/ugc/register.html?_flowId=register-flow&_flowExecutionKey=e1s1).
+8.	A RedHat account to download the necessary binaries (oc, kubectl & openshift-install binaries), RedHat coreos and the pull secret from. If you do not have a RedHat account, you can create one [here](https://www.redhat.com/wapps/ugc/register.html?_flowId=register-flow&_flowExecutionKey=e1s1).
 
 ## Steps:
 
@@ -99,24 +99,28 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
              2.	Subnet Range: 10.1.20.0/24
              3.	Private Google Access: On
              4.	Flow Logs: Off
-   4. Click **Create**.
+   4. For the Firewall rules, select all the 'allow' specific rules. Especially the rule that allows all communication between all the instances of the network. The rule name should be in the format of `<yournetworkname>-allow-custom`.
+   5. Click **Create**.
 
-4. Create a Firewall Rule to allow all traffic communication between all the instances of the network ‘ocp-network’.
+4. Create a Firewall Rule to allow all traffic communication to and from the bastion host.
    1. Go to **'VPC Network'** > **'Firewall'**
    2. Enter the relevant details:
-         1. Name: Allow-all
+         1. Name: allow-all-bastion
          2. Logs: Off
          3. Network: ocp-network
          4. Priority: 100
          5. Direction of Traffic: Ingress
          6. Action on Match: Allow
-         7. Targets: All instances in the network
+         7. Targets: Specified Target Tags
+            1. Target Tags: *'bastion'* (This is the network tag that will be assigned to the bastion host when it will be created)
          8. Source Filter: IPv4 Ranges
-         9. Source IPv4 Ranges: 0.0.0.0/0 (Note that 
+         9. Source IPv4 Ranges: 0.0.0.0/0
+         10. Protocols & Ports: Allow All
+         11. Click **Create**
 
 5. Create a ‘Cloud Router’ from the GCP console.
    1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**.
-   2. Click on **‘Create Router’**,
+   2. Click on **‘Create Router’**.
    3.	Enter the relevant details:
          1. Name: ocp-router
          2. Network: ocp-network
@@ -147,17 +151,22 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
          4. Network: ocp-network (this needs to be the network we created earlier within which our master-subnet & worker-subnet reside)
          5.	Click **‘Create’**.
 
-8. Create a bastion host in the master-subnet of the ocp-network we created earlier. Bastion host is basically a normal VM instance that can be used log into and run the necessary commands from. Ensure it has an external IP assigned to it as we will be ssh’ing into it and run all the necessary commands from there.
+8. Create a bastion host in the master-subnet of the ocp-network we created earlier. Bastion host is basically a normal VM instance that can be used to log into and run the necessary commands from. Ensure it has an external IP assigned to it as we will be ssh’ing into it and run all the necessary commands from there.
    1. Go to **Compute Engine** > **‘VM Instances’** > **‘Create Instance’**
    2. Put in the relevant details: Instance name, type (e2-standard-2 is used for my demo), region, zone.
    3.	For the boot disk, I have used Ubuntu 18.04 OS with 100 GB disk size.
-   4.	For the Networking:
-         1. Assign a hostname of your choice. 
-         2. Connect the network interface to the ocp-network, and subnet of master-subnet. You can set both Primary Internal IP & External IP to ‘Ephemeral’.
-         3.	Keep IP forwarding enabled.
-         4. Network Interface Card: VirtIO
-   5.	Under **‘Security’** > **‘Manage Access’** -  ensure you add a ssh public key that allows you to ssh into the bastion host from your local machine.
-   6.	Click **‘Create’**.
+   4.	Identity & API Access:
+         1. Service account: Compute Engine Default Service Account
+         2. Access Scopes: Allow efault Access
+   5. Firewall: Tick both checkboxes for allowing HTTP & HTTPS traffic.
+   6.	For the Networking:
+         1. Network Tags: *'bastion'* (Ensure your set this tag, so that the firewall rule we created in step 4 above is applicable to this bastion host)
+         2. Assign a hostname of your choice. 
+         3. Connect the network interface to the ocp-network, and subnet of master-subnet. You can set both Primary Internal IP & External IP to ‘Ephemeral’.
+         4.	Keep IP forwarding enabled.
+         5. Network Interface Card: VirtIO
+   7.	Under **‘Security’** > **‘Manage Access’** -  ensure you add a ssh public key that allows you to ssh into the bastion host from your local machine.
+   8.	Click **‘Create’**.
 
 ### OpenShift Installation 
 
@@ -165,14 +174,15 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
         
        ssh -i ~/.ssh/id_rsa username@<Public IP of bastion host>
        sudo su -
-10. Copy over the downloaded json key (from step 2 above) to your bastion host.
-11. Download some important packages:
+10. Copy over the downloaded json key (from step 2 above) to your bastion host, and save it by the name of `service-account-key.json`, as this is the service account key filename referenced in some of our commands later in this exercise. You can choose any name, just ensure you edit the commands accordingly.
+
+12. Download some important packages:
 
         sudo apt update
         sudo apt install wget git -y
     
 12. Download the necessary cli binaries & files from your [RedHat Cluster Manager](https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth?client_id=cloud-services&redirect_uri=https%3A%2F%2Fconsole.redhat.com%2F&state=1b3b6ba7-b426-4319-9197-8d4be1f14e5f&response_mode=fragment&response_type=code&scope=openid&nonce=72beef5c-277a-4dd7-a840-721e8eddbcac) login page onto the bastion host (you can use the wget tool to directly download onto your bastion host, or simply download them and copy over to your bastion host using scp):
-    1. openshift-installer cli binary
+    1. openshift-install cli binary
     2. oc cli binary
     3.	kubectl cli binary
     4.	RedHat Coreos image
@@ -180,7 +190,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     6.	gcloud cli binary (Can be downloaded from [here](https://cloud.google.com/sdk/docs/install))
     7.	jq binary `sudo apt install jq -y`
 
-13. Once downloaded and extracted, copy the openshift-installer, oc & kubectl binary into /usr/local/bin/ directory (Or whatever the $PATH you have configured on your bastion host).
+13. Once downloaded and extracted, copy the openshift-install, oc & kubectl binary into /usr/local/bin/ directory (Or whatever the $PATH you have configured on your bastion host).
         
         tar xvf openshift-install-linux.tar.gz
         tar xvf openshift-client-linux.tar.gz
@@ -195,13 +205,17 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
         git clone https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI.git
         
+    Also let's copy the Deployment Manager Templates (i.e the .py files, to the current working directory)
+    
+        cp ~/OCP4.10.3-install-GCP-UPI/deployment_manager_templates/* ~/ 
+        
 16. Create an installation directory which will be used to generate the manifests & ignition config files.
 
         mkdir install_dir
 
 17. Copy the sample-install-config.yaml file into the installation directory.
 
-        cp OCP4.10.3-install-GCP-UPI/sample-install-config.yaml install_dir/install-config.yaml
+        cp ~/OCP4.10.3-install-GCP-UPI/sample-install-config.yaml ~/install_dir/install-config.yaml
         
 18. Edit the copied install-config.yaml as per your needs. The important changes are:
     1. Base Domain value (Needs to be the same as specified in your private DNS zone)
@@ -212,7 +226,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 19. Export the GCP application credentials. This is the service account key that will be used for creating the remaining cluster components.
 
-        export GOOGLE_APPLICATION_CREDENTIALS=<path to your service account json key file>
+        export GOOGLE_APPLICATION_CREDENTIALS=<path to your service account key json file>
         
 20. Create the manifest files for your openshift cluster.
 
@@ -271,7 +285,6 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
       
     These environment variables will be required for the upcoming commands as they call these variables in them, so be sure to set these.
 
-    Ensure you copy the .py files to your current working directory from the git repository, as these will be referenced in the upcoming commands.
 
 24. Now we create the internal loadbalancer component that will be used for api related communication by the cluster nodes. The following commands will create the load balancer, its corresponding health check component, as well as the Backend empty instance groups into which the master nodes will be put into at the time of Master nodes creation in a later step.
     1. Create the .yaml file
@@ -314,7 +327,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
         export MASTER_SERVICE_ACCOUNT=(`gcloud iam service-accounts list --filter "email~^ocp-serviceaccount@${PROJECT_NAME}." --format json | jq -r '.[0].email'`)
         export WORKER_SERVICE_ACCOUNT=(`gcloud iam service-accounts list --filter "email~^ocp-serviceaccount@${PROJECT_NAME}." --format json | jq -r '.[0].email'`)
      
-     If the above commands do not set the correct service account email ENV variable, you can try running `gcloud iam service-accounts list`, copy the email address for your service account from the output's email column and manually set it as the environment variable for both MASTER_SERVICE_ACCOUNT & WORKER_SERVICE_ACCOUNT.
+     If the above commands do not set the correct service account email ENV variable, you can try running `gcloud iam service-accounts list`, copy the email address for your service account from the output's email column and manually set it as the environment variable for both `MASTER_SERVICE_ACCOUNT` & `WORKER_SERVICE_ACCOUNT`.
      
 28. Now let’s create 2 google cloud buckets. One will be for storing the bootstrap.ign file for the bootstrap node, and the other will be the one to store the RedHat Coreos image that the cluster nodes will pull to boot up from.
     1. Bucket to store bootstrap.ign file.
@@ -338,7 +351,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
         export BOOTSTRAP_IGN=`gsutil signurl -d 1h service-account-key.json gs://${INFRA_ID}-bootstrap-ignition/bootstrap.ign | grep "^gs:" | awk '{print $5}'`
 
 31. Now we create the bootstrap node itself using the relevant Deployment Manager template. The below commands will create the bootstrap node, a public IP for it, and an empty instance group for the bastion host:
-    1. Create the .yaml file that sets the metadata for the bootstrap node:
+    1. Create the .yaml config file for the bootstrap node deployment:
     
            cat <<EOF >04_bootstrap.yaml
            imports:
@@ -375,7 +388,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
            export MASTER_IGNITION=`cat install_dir/master.ign`
 
-    2. Create the .yaml file that sets the metadata for the master nodes:
+    2. Create the .yaml config file for the master nodes deployment:
 
            cat <<EOF >05_control_plane.yaml
            imports:
@@ -426,7 +439,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
            export WORKER_IGNITION=`cat install_dir/worker.ign`
 
-    2. Create the .yaml file that sets the metadata for the worker nodes
+    2. Create the .yaml file for the worker nodes deployment.
 
            cat <<EOF >06_worker.yaml
            imports:
@@ -521,9 +534,10 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     5. Set TTL value to 1 and TTL Unit to minutes.
     6. Resource Record Type: A
     7. Routing Policy: Default Record Type
-    8. IP Address: 10.1.10.11 (This needs to be the IP of the loadbalancer you created in the previous step)
+    8. IP Address: 10.1.10.9 (This needs to be the IP of the loadbalancer you created in the previous step)
     9. Click **‘Create’**.
  
+ <img width="628" alt="Screenshot 2022-03-12 at 4 28 22 PM" src="https://user-images.githubusercontent.com/53118271/158013614-5d0863e2-4baa-473b-b663-30f4026d941b.png">
  
 Once this is done, run a `watch oc get co`, and you should start seeing all your Cluster Operators becoming 'Available'.
  
@@ -561,6 +575,8 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
 
     7. You should now be able to access the OCP console UI through your browser using `https://console-openshift-console.apps.<clustername>.<basedomain>` .
 
+
+Your OpenShift 4.10.3 cluster is now up and running. You can login to your UI using the the username of 'kubeadmin' and the password present at `install_dir/auth/kubeadmin-password`
 
 
 

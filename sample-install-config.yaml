@@ -1,0 +1,36 @@
+apiVersion: v1
+baseDomain: openshift.com #Change this value to your base domain 
+compute:
+- architecture: amd64
+  hyperthreading: Enabled
+  name: worker
+  platform: {}
+  replicas: 2
+controlPlane:
+  architecture: amd64
+  hyperthreading: Enabled
+  name: master
+  platform: {}
+  replicas: 3
+metadata:
+  creationTimestamp: null
+  name: hamzacluster #Change the clustername to a value of your choice
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineNetwork:
+  - cidr: 10.1.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  gcp:
+    projectID: ocp-project-342905 #Change the value to your GCP Project ID
+    network: ocp-network #Change the value to your GCP network name
+    region: asia-northeast1 #Change the value to your region
+    controlPlaneSubnet: master-subnet #Change the value to your master subnet name
+    computeSubnet: worker-subnet #Change the value to your worker  subnet name
+publish: Internal
+pullSecret: '{"auths": ...}' #Put in your PullSecret captured from RedHat portal
+sshKey: 'ssh-ed25519 AAAA...' #Put in your sshkey generated to ssh into the cluster nodes

@@ -102,6 +102,17 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
    4. Click **Create**.
 
 4.	Create a Firewall Rule to allow all traffic communication between all the instances of the network ‘ocp-network’.
+   1. Go to **'VPC Network'** > **'Firewall'**
+   2. Enter the relevant details:
+      1. Name: Allow-all
+      2. Logs: Off
+      3. Network: ocp-network
+      4. Priority: 100
+      5. Direction of Traffic: Ingress
+      6. Action on Match: Allow
+      7. Targets: All instances in the network
+      8. Source Filter: IPv4 Ranges
+      9. Source IPv4 Ranges: 0.0.0.0/0 (Note that 
 
 5. Create a ‘Cloud Router’ from the GCP console.
    1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**.
@@ -167,8 +178,11 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     5.	Pull Secret
 
 13. Once downloaded and extracted, copy the openshift-installer, oc & kubectl binary into /usr/local/bin/ directory (Or whatever the $PATH you have configured on your bastion host).
+        
+        tar xvf openshift-install-linux.tar.gz
+        tar xvf openshift-client-linux.tar.gz
+        mv oc kubectl openshift-installer /usr/local/bin/
 
-ADD STEPS TO SHOW EXACTLY HOW I DOWNLOADED AND EXTRACTED THE FILES
 
 14. Generate a new ssh key pair on your bastion host keeping all default options. The public key from this key pair will be inserted in your install-config.yaml file. Your cluster nodes will be injected with this ssh key and you will be able to ssh into them later for any kind of monitoring & troubleshooting.
              

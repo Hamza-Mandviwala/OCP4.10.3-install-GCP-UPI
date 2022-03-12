@@ -168,14 +168,17 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 10. Copy over the downloaded json key (from step 2 above) to your bastion host.
 11. Download some important packages:
 
+        sudo apt update
         sudo apt install wget git -y
     
-12. Download the necessary files & binaries onto the bastion host from your [RedHat Cluster Manager](https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth?client_id=cloud-services&redirect_uri=https%3A%2F%2Fconsole.redhat.com%2F&state=1b3b6ba7-b426-4319-9197-8d4be1f14e5f&response_mode=fragment&response_type=code&scope=openid&nonce=72beef5c-277a-4dd7-a840-721e8eddbcac) login page (you can use the wget tool to directly download onto your bastion host, or simply download them and copy over to your bastion host using scp):
-    1. openshift-installer binary
-    2. oc binary
-    3.	kubectl binary
+12. Download the necessary cli binaries & files from your [RedHat Cluster Manager](https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/auth?client_id=cloud-services&redirect_uri=https%3A%2F%2Fconsole.redhat.com%2F&state=1b3b6ba7-b426-4319-9197-8d4be1f14e5f&response_mode=fragment&response_type=code&scope=openid&nonce=72beef5c-277a-4dd7-a840-721e8eddbcac) login page onto the bastion host (you can use the wget tool to directly download onto your bastion host, or simply download them and copy over to your bastion host using scp):
+    1. openshift-installer cli binary
+    2. oc cli binary
+    3.	kubectl cli binary
     4.	RedHat Coreos image
     5.	Pull Secret
+    6.	gcloud cli binary (Can be downloaded from [here](https://cloud.google.com/sdk/docs/install))
+    7.	jq binary `sudo apt install jq -y`
 
 13. Once downloaded and extracted, copy the openshift-installer, oc & kubectl binary into /usr/local/bin/ directory (Or whatever the $PATH you have configured on your bastion host).
         
@@ -198,7 +201,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 17. Copy the sample-install-config.yaml file into the installation directory.
 
-        cp sample-install-config.yaml install_dir/install-config.yaml
+        cp OCP4.10.3-install-GCP-UPI/sample-install-config.yaml install_dir/install-config.yaml
         
 18. Edit the copied install-config.yaml as per your needs. The important changes are:
     1. Base Domain value (Needs to be the same as specified in your private DNS zone)

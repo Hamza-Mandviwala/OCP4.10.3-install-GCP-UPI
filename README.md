@@ -101,18 +101,18 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
              4.	Flow Logs: Off
    4. Click **Create**.
 
-4.	Create a Firewall Rule to allow all traffic communication between all the instances of the network ‘ocp-network’.
+4. Create a Firewall Rule to allow all traffic communication between all the instances of the network ‘ocp-network’.
    1. Go to **'VPC Network'** > **'Firewall'**
    2. Enter the relevant details:
-      1. Name: Allow-all
-      2. Logs: Off
-      3. Network: ocp-network
-      4. Priority: 100
-      5. Direction of Traffic: Ingress
-      6. Action on Match: Allow
-      7. Targets: All instances in the network
-      8. Source Filter: IPv4 Ranges
-      9. Source IPv4 Ranges: 0.0.0.0/0 (Note that 
+         1. Name: Allow-all
+         2. Logs: Off
+         3. Network: ocp-network
+         4. Priority: 100
+         5. Direction of Traffic: Ingress
+         6. Action on Match: Allow
+         7. Targets: All instances in the network
+         8. Source Filter: IPv4 Ranges
+         9. Source IPv4 Ranges: 0.0.0.0/0 (Note that 
 
 5. Create a ‘Cloud Router’ from the GCP console.
    1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**.

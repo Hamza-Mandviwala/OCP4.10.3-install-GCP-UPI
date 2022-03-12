@@ -181,7 +181,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
         
         tar xvf openshift-install-linux.tar.gz
         tar xvf openshift-client-linux.tar.gz
-        mv oc kubectl openshift-installer /usr/local/bin/
+        mv oc kubectl openshift-install /usr/local/bin/
 
 
 14. Generate a new ssh key pair on your bastion host keeping all default options. The public key from this key pair will be inserted in your install-config.yaml file. Your cluster nodes will be injected with this ssh key and you will be able to ssh into them later for any kind of monitoring & troubleshooting.

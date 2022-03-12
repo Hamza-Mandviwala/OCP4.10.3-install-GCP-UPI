@@ -1,4 +1,4 @@
-# OCP 4.10.3 installation on GCP using UPI method
+# OpenShift 4.10.3 installation on GCP using UPI method
 
 This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10.3 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method.
 

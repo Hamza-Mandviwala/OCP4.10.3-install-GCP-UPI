@@ -107,10 +107,11 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
    1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**.
    2. Click on **‘Create Router’**,
    3.	Enter the relevant details:
-         1. Network: ocp-network
-         2. Region: asia-northeast1
-         3. Select *“Advertise all subnets visible to the Cloud Router (Default)”*
-         4. Click **Create**.
+         1. Name: ocp-router
+         2. Network: ocp-network
+         3. Region: asia-northeast1
+         4. Select *“Advertise all subnets visible to the Cloud Router (Default)”*
+         5. Click **Create**.
 
 6. Create 2 Cloud NAT components connected to the router we created above, for both of our subnets created earlier.
    1. Go to **‘Network Services’** > **‘Cloud NAT’**.
@@ -169,7 +170,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 ADD STEPS TO SHOW EXACTLY HOW I DOWNLOADED AND EXTRACTED THE FILES
 
-15. Generate a new ssh key pair on your bastion host keeping all default options. The public key from this key pair will be inserted in your install-config.yaml file. Your cluster nodes will be injected with this ssh key and you will be able to ssh into them later for any kind of monitoring & troubleshooting.
+14. Generate a new ssh key pair on your bastion host keeping all default options. The public key from this key pair will be inserted in your install-config.yaml file. Your cluster nodes will be injected with this ssh key and you will be able to ssh into them later for any kind of monitoring & troubleshooting.
              
         ssh-keygen
       
@@ -403,7 +404,7 @@ ADD STEPS TO SHOW EXACTLY HOW I DOWNLOADED AND EXTRACTED THE FILES
         gsutil rb gs://${INFRA_ID}-bootstrap-ignition
         gcloud deployment-manager deployments delete ${INFRA_ID}-bootstrap
 
-37. Now we are good to create our worker nodes. Note that if you run an `oc get co` command from your bastion host at this time, you will still see a few operators unavailable, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes by default, and only then will a route to your console will be created, and eventually your authentication operator would also reach completion.
+37. Now we are good to create our worker nodes. Note that if you run an `oc get co` command from your bastion host at this time, you will still see a few operators unavailable, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes by default, and only then will a route to your console be created, and eventually your authentication operator would also reach completion.
     1. Set the env variable for the worker ignition config file.
 
            export WORKER_IGNITION=`cat install_dir/worker.ign`
@@ -488,7 +489,7 @@ ADD STEPS TO SHOW EXACTLY HOW I DOWNLOADED AND EXTRACTED THE FILES
        1. You can give it a name if you want to, we have left it blank for this exercise.
        2. Subnetwork: master-subnet
        3. Internal IP – Purpose: Shared
-              1. IP Address: Ephemeral (Automatic)
+          1. IP Address: Ephemeral (Automatic)
        4. Ports: All
        5. Global Access: Disable
        6. Click **Done**.
@@ -531,7 +532,7 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
  
            backend servers
                mode tcp
-               server hamzacluster.openshift.com 10.1.10.8 # Note that in this last line, the IP address 10.1.10.8 should be replaced by your loadbalancer IP address.
+               server hamzacluster.openshift.com 10.1.10.8 # Please change the IP address to the IP address of your Internal worker plane Loadbalancer, and the DNS name to your private DNS name
     
     4. Once the haproxy is configured, restart it: `systemctl restart haproxy`.
     5.	Run an `oc get routes -A` command to get the Console URL through which you can access.

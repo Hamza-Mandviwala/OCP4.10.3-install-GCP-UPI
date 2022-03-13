@@ -49,8 +49,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 | Node	| CPUs	| Memory/GB	| Disk Size	| OS	| Deployment type	|Subnet| Instance Type |
 |------|------|-----------|-----------|----|-----------------|------|---------------|
-| Bastion Host |	2 |	8	| 50Gib |	Ubuntu 18.04 |	Manual |	Master-subnet | e2-standard-2 |
-| Bootstrap Node	| 4	|16	|50Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Bastion Host |	2 |	4	| 50Gib |	Ubuntu 18.04 |	Manual |	Master-subnet | e2-medium |
+| Bootstrap Node	| 2	| 8	|50Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-2 |
 | Master 1	| 4	| 16 | 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
 | Master 2 |	4 |	16	| 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
 | Master 3	| 4	| 16	| 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
@@ -157,7 +157,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
    3.	For the boot disk, I have used Ubuntu 18.04 OS with 50 GB disk size.
    4.	Identity & API Access:
          1. Service account: Compute Engine Default Service Account
-         2. Access Scopes: Allow efault Access
+         2. Access Scopes: Allow full access to all Cloud APIs (**This option is necessary as only then will you be able to execute the gcloud commands**)
    5. Firewall: Tick both checkboxes for allowing HTTP & HTTPS traffic.
    6.	For the Networking:
          1. Network Tags: *'bastion'* (Ensure your set this tag, so that the firewall rule we created in step 4 above is applicable to this bastion host)
@@ -368,7 +368,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
                cluster_network: '${CLUSTER_NETWORK}' 
                control_subnet: '${CONTROL_SUBNET}' 
                image: '${CLUSTER_IMAGE}' 
-               machine_type: 'e2-standard-4' 
+               machine_type: 'e2-standard-2' 
                root_volume_size: '50' 
 
                bootstrap_ign: '${BOOTSTRAP_IGN}' 

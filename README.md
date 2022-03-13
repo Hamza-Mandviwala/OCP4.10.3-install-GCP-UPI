@@ -21,7 +21,7 @@ We will also be skipping the steps of the intermediate service accounts required
   * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#steps)
     * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
     * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)
-    * [Creating a second Internal Loadbalancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic) (Mandatory step for cluster install to reach completion)
+    * [Creating a second Internal Loadbalancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
     * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
 
 
@@ -481,7 +481,9 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 39. Now if you run `oc get nodes`, you should be able to see your worker nodes too. 
 
-### Creating a second Internal Loadbalancer for worker plane traffic
+### Creating a second Internal Loadbalancer for worker plane traffic 
+
+NOTE: *The steps in this section are needed so that we can have a single IP address to which our *.apps traffic can forwarded to and eventually be loadbalanced between the worker nodes. Alternatively, you can skip creating this second load balancer. Instead, when creating the wildcard DNS entry for `*.apps` you can opt for 'wighted round robin' Routing Policy and simply add the IP addresses of both worker nodes with a weight of 1000 for each. In production, however, it is advisable to take the approach of a load balancer so that it can become scalable, and new worker nodes can be added easily to the cluster without impacting any application routing.*
 
 40. We will now create 2 new unmanaged instance groups for each of our worker nodes. This is because, later we will be creating another internal load balancer that will forward the worker node specific traffic.
     1. Go to **‘Compute Engine’** > **‘Instance Groups’**

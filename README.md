@@ -49,13 +49,13 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 | Node	| CPUs	| Memory/GB	| Disk Size	| OS	| Deployment type	|Subnet| Instance Type |
 |------|------|-----------|-----------|----|-----------------|------|---------------|
-| Bastion Host |	2 |	8	| 100Gib |	Ubuntu 18.04 |	Manual |	Master-subnet | e2-standard-2 |
-| Bootstrap Node	| 4	|16	|128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
-| Master 1	| 4	| 16 | 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
-| Master 2 |	4 |	16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
-| Master 3	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
-| Worker 1	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template |	Worker-Subnet | e2-standard-4 |
-| Worker 2	| 4	| 16	| 128Gib	| RedHat CoreOS	| Deployment Manager Template	| Worker Subnet | e2-standard-4 |
+| Bastion Host |	2 |	8	| 50Gib |	Ubuntu 18.04 |	Manual |	Master-subnet | e2-standard-2 |
+| Bootstrap Node	| 4	|16	|50Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Master 1	| 4	| 16 | 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Master 2 |	4 |	16	| 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Master 3	| 4	| 16	| 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Master-subnet | e2-standard-4 |
+| Worker 1	| 4	| 16	| 100Gib	| RedHat CoreOS	| Deployment Manager Template |	Worker-Subnet | e2-standard-4 |
+| Worker 2	| 4	| 16	| 100Gib	| RedHat CoreOS	| Deployment Manager Template	| Worker Subnet | e2-standard-4 |
 
 ## Prerequisites:
 1.	A GCP account.
@@ -154,7 +154,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 8. Create a bastion host in the master-subnet of the ocp-network we created earlier. Bastion host is basically a normal VM instance that can be used to log into and run the necessary commands from. Ensure it has an external IP assigned to it as we will be ssh’ing into it and run all the necessary commands from there.
    1. Go to **Compute Engine** > **‘VM Instances’** > **‘Create Instance’**
    2. Put in the relevant details: Instance name, type (e2-standard-2 is used for my demo), region, zone.
-   3.	For the boot disk, I have used Ubuntu 18.04 OS with 100 GB disk size.
+   3.	For the boot disk, I have used Ubuntu 18.04 OS with 50 GB disk size.
    4.	Identity & API Access:
          1. Service account: Compute Engine Default Service Account
          2. Access Scopes: Allow efault Access
@@ -369,7 +369,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
                control_subnet: '${CONTROL_SUBNET}' 
                image: '${CLUSTER_IMAGE}' 
                machine_type: 'e2-standard-4' 
-               root_volume_size: '128' 
+               root_volume_size: '50' 
 
                bootstrap_ign: '${BOOTSTRAP_IGN}' 
            EOF
@@ -407,7 +407,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
                control_subnet: '${CONTROL_SUBNET}' 
                image: '${CLUSTER_IMAGE}' 
                machine_type: 'e2-standard-4' 
-               root_volume_size: '128'
+               root_volume_size: '100'
                service_account_email: '${MASTER_SERVICE_ACCOUNT}' 
 
                ignition: '${MASTER_IGNITION}' 
@@ -454,7 +454,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
                compute_subnet: '${COMPUTE_SUBNET}' 
                image: '${CLUSTER_IMAGE}' 
                machine_type: 'e2-standard-4' 
-               root_volume_size: '128'
+               root_volume_size: '100'
                service_account_email: '${WORKER_SERVICE_ACCOUNT}' 
                ignition: '${WORKER_IGNITION}' 
            - name: 'worker-1'
@@ -465,7 +465,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
                compute_subnet: '${COMPUTE_SUBNET}' 
                image: '${CLUSTER_IMAGE}' 
                machine_type: 'e2-standard-4' 
-               root_volume_size: '128'
+               root_volume_size: '100'
                service_account_email: '${WORKER_SERVICE_ACCOUNT}' 
                ignition: '${WORKER_IGNITION}' 
            EOF

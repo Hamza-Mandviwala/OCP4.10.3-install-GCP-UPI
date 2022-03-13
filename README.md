@@ -153,7 +153,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 8. Create a bastion host in the master-subnet of the ocp-network we created earlier. Bastion host is basically a normal VM instance that can be used to log into and run the necessary commands from. Ensure it has an external IP assigned to it as we will be ssh’ing into it and run all the necessary commands from there.
    1. Go to **Compute Engine** > **‘VM Instances’** > **‘Create Instance’**
-   2. Put in the relevant details: Instance name, type (e2-standard-2 is used for my demo), region, zone.
+   2. Put in the relevant details: Instance name, type (e2-medium is used for my demo), region, zone.
    3.	For the boot disk, I have used Ubuntu 18.04 OS with 50 GB disk size.
    4.	Identity & API Access:
          1. Service account: Compute Engine Default Service Account

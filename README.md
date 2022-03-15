@@ -6,7 +6,9 @@ We have selected GCP as our infrastructure platform, mainly because it offers so
 
 This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)  process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
 
-The procedure and steps described in this document have been taken mainly from the official RedHat documentation for OpenShift (https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html) .
+The procedure and steps described in this document have been taken mainly from the official RedHat documentation for OpenShift (https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html).
+
+YouTube video demonstrating this exercise : https://www.youtube.com/watch?v=DdWCL4eE0vM
 
 Some changes have been made to the original steps described in the official docs. These are mainly the creation of networks, subnetworks, DNS zones, Cloud NATs – for which we will walk you through the steps to be performed on the UI, instead of the CLI. The idea is to understand how the cluster looks from the ground up.
 

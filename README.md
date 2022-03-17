@@ -487,7 +487,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 NOTE: *The steps in this section are needed so that we can have a single IP address to which our `*.apps` traffic can be forwarded to and eventually be loadbalanced between the worker nodes. Alternatively, you can skip creating this second load balancer, and instead, when creating the wildcard DNS entry for `*.apps` you can opt for 'weighted round robin' Routing Policy and simply add the IP addresses of both worker nodes with a weight of 1000 for each. In production, however, it is advisable to take the approach of a load balancer so that it can become scalable, and new worker nodes can be added easily to the cluster without impacting any application routing.*
 
-40. We will now create 2 new unmanaged instance groups for each of our worker nodes. This is because, later we will be creating another internal load balancer that will forward the worker node specific traffic.
+40. We will now create 2 new unmanaged instance groups for each of our worker nodes. This is because, later we will be creating another internal load balancer that will forward the worker plane specific traffic.
     1. Go to **‘Compute Engine’** > **‘Instance Groups’**.
     2. Click on **‘Create Instance Group’** and select **‘New unmanaged instance group’**.
     3. Enter the relevant details like name, region & zone. Ensure region & zone is the same as where our worker nodes reside.
@@ -569,7 +569,9 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
            backend servers
                mode tcp
                server hamzacluster.openshift.com 10.1.10.9 # Please change the IP address to the IP address of your Internal worker plane Loadbalancer, and the DNS name to your private DNS name
-    
+         
+         You can make use of the sample-haproxy.cfg file from the GitHub repository to compare your haproxy configuration.
+
     4. Once the haproxy is configured, restart it: `systemctl restart haproxy`.
     5.	Run an `oc get routes -A` command to get the Console URL through which you can access.
     6. On your local machine, add an entry in the `/etc/hosts` file (Linux & Mac Users) that points to the Public IP of your bastion host for the name address of all the OpenShift Services that have been created e.g prometheus, grafana, alert manager etc. For Windows Users, you might have to add the entry into `c:\Windows\System32\Drivers\etc\hosts`.

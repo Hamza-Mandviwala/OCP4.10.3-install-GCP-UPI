@@ -23,7 +23,7 @@ We will also be skipping the steps of the intermediate service accounts required
   * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#steps)
     * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
     * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)
-    * [Creating a second Internal Loadbalancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
+    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
     * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
 
 
@@ -37,7 +37,7 @@ Before we begin the bootstrap process, we will be creating some prerequisite inf
 
 After the bootstrap process is complete, we will be removing all the bootstrap components from the cluster. And then we will proceed with the creation of the worker nodes.
 
-Once we have our worker nodes up and running, we will verify if all our cluster controllers are showing as ‘available’. Finally, we will configure a reverse proxy on the bastion host so that we can access the OCP Console UI locally on our browser.
+Once we have our worker nodes up and running, we will configure a reverse proxy on the bastion host so that we can access the OCP Console UI locally on our browser. Finally, we will verify if all our cluster controllers are showing as ‘Available’.
 
 ## Final Architecture and Cluster Layout (Post Installation)
 
@@ -72,8 +72,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
 ### Creating GCP Infra components
 
-1. Create a GCP project inside your GCP console. I have a project named ‘ocp-project’ created already, and this will be used to host the OCP 4.10.3 cluster.
-   1. Go to **IAM & Admin** > **Create a Project**
+1. Create a GCP project inside our GCP console. We have a project named ‘ocp-project’ created already, and this will be used to host the OCP 4.10.3 cluster.
+   1. Go to **IAM & Admin** > **Create a Project**.
    2. Enter the project name & organization and click on *Create*.
 
 2. Create a service account under IAM:
@@ -107,18 +107,18 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 4. Create a Firewall Rule to allow all traffic communication to and from the bastion host.
    1. Go to **'VPC Network'** > **'Firewall'**
    2. Enter the relevant details:
-         1. Name: allow-all-bastion
+         1. Name: *allow-all-bastion*
          2. Logs: Off
          3. Network: ocp-network
          4. Priority: 100
          5. Direction of Traffic: Ingress
          6. Action on Match: Allow
          7. Targets: Specified Target Tags
-            1. Target Tags: *'bastion'* (This is the network tag that will be assigned to the bastion host when it will be created)
+            1. Target Tags: *'bastion'* (This is the network tag that will be assigned to the bastion host when it will be created).
          8. Source Filter: IPv4 Ranges
          9. Source IPv4 Ranges: 0.0.0.0/0
          10. Protocols & Ports: Allow All
-         11. Click **Create**
+         11. Click **Create**.
 
 5. Create a ‘Cloud Router’ from the GCP console.
    1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**.
@@ -127,8 +127,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
          1. Name: ocp-router
          2. Network: ocp-network
          3. Region: asia-northeast1
-         4. Select *“Advertise all subnets visible to the Cloud Router (Default)”*
-         5. Click **Create**.
+         4. Select *“Advertise all subnets visible to the Cloud Router (Default)”*.
+         5. Click **Create**..
 
 6. Create 2 Cloud NAT components connected to the router we created above, for both of our subnets created earlier.
    1. Go to **‘Network Services’** > **‘Cloud NAT’**.
@@ -145,16 +145,16 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
    4. Repeat steps i, ii & iii again for the worker-subnet, and ensure you change the Gateway Name to ocp-nat-worker-gw for example. And ensure both Cloud NATs are connected to the same Cloud Router.
 
 7. Create a private DNS zone from the GCP UI:
-   1. Go to **‘Network Services’** > **‘Cloud DNS’**
+   1. Go to **‘Network Services’** > **‘Cloud DNS’**.
    2. Click on **‘Create Zone’** and enter the relevant details:
          1. Zone type: Private
          2. Zone name: ocp-private-zone (you can use any name of your choice)
-         3. DNS name: hamzacluster.openshift.com (The DNS name consists of a combination of the cluster name & base domain i.e <cluster_name>.<base_domain> . In this example ‘hamzacluster’ is the name of my cluster and ‘openshift.com’ is the base domain that I will be using. Ensure you enter the values correctly as the ‘cluster name’ & ‘base domain’ you specify here will be the same that will have to be used in the install-config.yaml file later.
+         3. DNS name: hamzacluster.openshift.com (The DNS name consists of a combination of the cluster name & base domain i.e <cluster_name>.<base_domain> . In this example ‘hamzacluster’ is the name of my cluster and ‘openshift.com’ is the base domain that I will be using. Ensure you enter the values correctly as the cluster name & base domain you specify here will be the same that will have to be used in the install-config.yaml file later.
          4. Network: ocp-network (this needs to be the network we created earlier within which our master-subnet & worker-subnet reside)
          5.	Click **‘Create’**.
 
 8. Create a bastion host in the master-subnet of the ocp-network we created earlier. Bastion host is basically a normal VM instance that can be used to log into and run the necessary commands from. Ensure it has an external IP assigned to it as we will be ssh’ing into it and run all the necessary commands from there.
-   1. Go to **Compute Engine** > **‘VM Instances’** > **‘Create Instance’**
+   1. Go to **Compute Engine** > **‘VM Instances’** > **‘Create Instance’**.
    2. Put in the relevant details: Instance name, type (e2-medium is used for my demo), region, zone.
    3.	For the boot disk, I have used Ubuntu 18.04 OS with 50 GB disk size.
    4.	Identity & API Access:
@@ -178,7 +178,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
        sudo su -
 10. Copy over the downloaded json key (from step 2 above) to your bastion host, and save it by the name of `service-account-key.json`, as this is the service account key filename referenced in some of our commands later in this exercise. You can choose any name, just ensure you edit the commands accordingly.
 
-12. Download some important packages:
+11. Download some important packages:
 
         sudo apt update
         sudo apt install wget git -y
@@ -203,7 +203,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
              
         ssh-keygen
       
-15. Clone this repository. This contains the necessary .py files required to build your cluster components like load balancers & VM instances.
+15. Clone this repository. This contains the necessary .py files required to build the cluster components like load balancers & VM instances.
 
         git clone https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI.git
         
@@ -219,7 +219,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
         cp ~/OCP4.10.3-install-GCP-UPI/sample-install-config.yaml ~/install_dir/install-config.yaml
         
-18. Edit the copied install-config.yaml as per your needs. The important changes are:
+18. Edit the copied install-config.yaml as per your environment. The important changes are:
     1. Base Domain value (Needs to be the same as specified in your private DNS zone)
     2. Cluster name (Needs to be the same as specified in your private DNS zone)
     3. Pull Secret (To be taken from your RedHat account portal)
@@ -230,7 +230,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
         export GOOGLE_APPLICATION_CREDENTIALS=<path to your service account key json file>
         
-20. Create the manifest files for your openshift cluster.
+20. Create the manifest files for your OpenShift cluster.
 
         openshift-install create manifests --dir install_dir/
     
@@ -288,8 +288,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     These environment variables will be required for the upcoming commands as they call these variables in them, so be sure to set these.
 
 
-24. Now we create the internal loadbalancer component that will be used for api related communication by the cluster nodes. The following commands will create the load balancer, its corresponding health check component, as well as the Backend empty instance groups into which the master nodes will be put into at the time of Master nodes creation in a later step.
-    1. Create the .yaml file
+24. Now we create the internal loadbalancer component that will be used for api related communication by the cluster nodes. The following commands will create the load balancer, its corresponding health check component, as well as the backend empty instance groups into which the master nodes will be put into at the time of Master nodes creation in a later step.
+    1. Create the `.yaml` file
        
            cat <<EOF >02_infra.yaml
            imports:
@@ -312,7 +312,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
            gcloud deployment-manager deployments create ${INFRA_ID}-infra --config 02_infra.yaml
            
            
-25. We now need to get the Cluster IP. This is basically the loadbalancer IP that we created in the previous step. This IP is used as the Host IP addresses for the record sets that will be put into our private DNS zone. 
+25. We now need to get the Cluster IP. This is basically the loadbalancer IP that we created in the previous step. This IP is used as the Host IP addresses for the DNS record sets that will be put into our private DNS zone. 
 
         export CLUSTER_IP=(`gcloud compute addresses describe ${INFRA_ID}-cluster-ip --region=${REGION} --format json | jq -r .address`)
         
@@ -352,8 +352,8 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
        
         export BOOTSTRAP_IGN=`gsutil signurl -d 1h service-account-key.json gs://${INFRA_ID}-bootstrap-ignition/bootstrap.ign | grep "^gs:" | awk '{print $5}'`
 
-31. Now we create the bootstrap node itself using the relevant Deployment Manager template. The below commands will create the bootstrap node, a public IP for it, and an empty instance group for the bastion host:
-    1. Create the .yaml config file for the bootstrap node deployment:
+31. Now we create the bootstrap node itself using the relevant Deployment Manager template. The below commands will create the bootstrap node, a public IP for it, and an empty instance group for the bootstrap node:
+    1. Create the `.yaml` config file for the bootstrap node deployment:
     
            cat <<EOF >04_bootstrap.yaml
            imports:
@@ -386,11 +386,11 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
         gcloud compute backend-services add-backend ${INFRA_ID}-api-internal-backend-service --region=${REGION} --instance-group=${INFRA_ID}-bootstrap-instance-group --instance-group-zone=${ZONE_0}
 
 33. We now proceed with the master nodes creation. Note that we are using instance types e2-standard-4, but you can use any other type which suits you best. However please ensure the type you choose accommodates at least 16GB Memory and 4 vCPUs, as OCP will not be able to run the required containers on lower spec instance types. I have tried many times and it has usually failed or has been unstable.
-    1. Set the env variable for the master ignition config file
+    1. Set the env variable for the master ignition config file.
 
            export MASTER_IGNITION=`cat install_dir/master.ign`
 
-    2. Create the .yaml config file for the master nodes deployment:
+    2. Create the `.yaml` config file for the master nodes deployment:
 
            cat <<EOF >05_control_plane.yaml
            imports:
@@ -419,7 +419,7 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     
         gcloud deployment-manager deployments create ${INFRA_ID}-control-plane --config 05_control_plane.yaml
         
-34. Once your master nodes have been deployed, we also need to add them to their respective instance groups that were created earlier in the loadbalancer creation step:
+34. Once the master nodes have been deployed, we also need to add them to their respective instance groups that were created earlier in the load balancer creation step:
 
         gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_0}-instance-group --zone=${ZONE_0} --instances=${INFRA_ID}-master-0
         gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_1}-instance-group --zone=${ZONE_1} --instances=${INFRA_ID}-master-1
@@ -429,19 +429,19 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
     1. ssh into your bootstrap node and run `journalctl -b -f -u release-image.service -u bootkube.service` . Upon bootstrap process completion, the output of this command should stop at a message that looks something like `systemd[1]: bootkube.service: Succeeded`. 
     2. You can also ssh into the master nodes and run a `sudo crictl ps` to monitor the container creation of the various OCP components. Sometimes the kube-apiserver & etcd related components fluctuate and keep flapping. Do not panic and allow some time for these to stabilize. You can also perform a rolling reboot of your master nodes if you wish to.
 
-36. Once your bootstrap process completes, you can remove your bootstrap components:
+36. Once our bootstrap process completes, we can remove the bootstrap components:
 
         gcloud compute backend-services remove-backend ${INFRA_ID}-api-internal-backend-service --region=${REGION} --instance-group=${INFRA_ID}-bootstrap-instance-group --instance-group-zone=${ZONE_0}
         gsutil rm gs://${INFRA_ID}-bootstrap-ignition/bootstrap.ign
         gsutil rb gs://${INFRA_ID}-bootstrap-ignition
         gcloud deployment-manager deployments delete ${INFRA_ID}-bootstrap
 
-37. Now we are good to create our worker nodes. Note that if you run an `oc get co` command from your bastion host at this time, you will still see a few operators unavailable, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes by default, and only then will a route to your console be created, and eventually your authentication operator would also reach completion.
+37. Now we are good to create we worker nodes. Note that if we run an `oc get co` command from the bastion host at this time, we will still see a few operators unavailable, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes by default, and only then will a route to the console be created, and eventually the authentication operator would also reach completion.
     1. Set the env variable for the worker ignition config file.
 
            export WORKER_IGNITION=`cat install_dir/worker.ign`
 
-    2. Create the .yaml file for the worker nodes deployment.
+    2. Create the *.yaml* file for the worker nodes deployment.
 
            cat <<EOF >06_worker.yaml
            imports:
@@ -476,37 +476,37 @@ Once we have our worker nodes up and running, we will verify if all our cluster 
 
             gcloud deployment-manager deployments create ${INFRA_ID}-worker --config 06_worker.yaml
 
-38. With the node deployments created, there should be 2 CSRs in a pending state, we need to approve these. Once you approve the first 2, there will be 2 additional CSRs generated by those nodes, therefore, 4 CSRs (in sequence of 2 CSRs each) in total that we must approve.
+38. With the node deployments created, there should be 2 CSRs in a pending state, we need to approve these. Once we approve the first 2, there will be 2 additional CSRs generated by those nodes, therefore, 4 CSRs (in sequence of 2 CSRs each) in total that we must approve.
 
         oc get csr
         oc adm certificate approve <csr name>
 
-39. Now if you run `oc get nodes`, you should be able to see your worker nodes too. 
+39. Now if we run `oc get nodes`, we should be able to see the worker nodes too. 
 
-### Creating a second Internal Loadbalancer for worker plane traffic 
+### Creating a second Internal Load Balancer for worker plane traffic 
 
-NOTE: *The steps in this section are needed so that we can have a single IP address to which our `*.apps` traffic can be forwarded to and eventually be loadbalanced between the worker nodes. Alternatively, you can skip creating this second load balancer. Instead, when creating the wildcard DNS entry for `*.apps` you can opt for 'weighted round robin' Routing Policy and simply add the IP addresses of both worker nodes with a weight of 1000 for each. In production, however, it is advisable to take the approach of a load balancer so that it can become scalable, and new worker nodes can be added easily to the cluster without impacting any application routing.*
+NOTE: *The steps in this section are needed so that we can have a single IP address to which our `*.apps` traffic can be forwarded to and eventually be loadbalanced between the worker nodes. Alternatively, you can skip creating this second load balancer, and instead, when creating the wildcard DNS entry for `*.apps` you can opt for 'weighted round robin' Routing Policy and simply add the IP addresses of both worker nodes with a weight of 1000 for each. In production, however, it is advisable to take the approach of a load balancer so that it can become scalable, and new worker nodes can be added easily to the cluster without impacting any application routing.*
 
 40. We will now create 2 new unmanaged instance groups for each of our worker nodes. This is because, later we will be creating another internal load balancer that will forward the worker node specific traffic.
-    1. Go to **‘Compute Engine’** > **‘Instance Groups’**
-    2. Click on **‘Create Instance Group’** and select **‘New unmanaged instance group’**
-    3. Enter the relevant details like name, region & zone. Ensure region & zone is the same as where your worker nodes reside.
+    1. Go to **‘Compute Engine’** > **‘Instance Groups’**.
+    2. Click on **‘Create Instance Group’** and select **‘New unmanaged instance group’**.
+    3. Enter the relevant details like name, region & zone. Ensure region & zone is the same as where our worker nodes reside.
     4. For networking options:
        1.	Network: ocp-network (Name of your network that hosts the cluster)
        2. Subnetwork: worker-subnet (needs to be the name of your worker nodes subnet)
        3. VM Instances: Select one of the worker nodes from the drop-down list.
-    5. Click **‘Create’**
+    5. Click **‘Create’**.
     6.	Repeat steps i., ii., iii.,iv. & v. for creating a second instance group that will have the second worker node in it. 
 
 41. Now we create a new internal load balancer that will have the 2 instance groups we created in the previous step as backends:
-    1. Go to **‘Network Services’** > **‘Loadbalancing’**
-    2. Click on **‘Create Load Balancer’** > Select **‘TCP load balancing’**
+    1. Go to **‘Network Services’** > **‘Loadbalancing’**.
+    2. Click on **‘Create Load Balancer’** > Select **‘TCP load balancing’**.
     3. Select the following options:
        1. Internet facing or Internal only: *Only Between my VMs*
        2. Multiple regions or Single region: *Single Region* 
        3. Click **‘Continue’**
     4. Enter the name & region.
-    5. For the network, select your network name to which your VM Instances are connected. (‘ocp-network ‘in our exercise)
+    5. For the network, select your network name to which your VM Instances are connected. (‘ocp-network ‘in this exercise).
     6. For **Backend Configuration**:
        1. Select one of the instance groups we created in the previous step, click Done.
        2. Add another backend by selecting the second instance group we created in the previous step, click Done.
@@ -528,20 +528,21 @@ NOTE: *The steps in this section are needed so that we can have a single IP addr
        5. Global Access: Disable
        6. Click **Done**.
     8. Click **‘Create’**.
-    9. From the loadbalancers list, click on the name of the newly created loadbalancer and take note of the Frontend IP address. This will be the IP address that will be used for our new DNS record set in the next step.
+    9. From the load balancers list, click on the name of the newly created load balancer and take note of the Frontend IP address. This will be the IP address that will be used for our new DNS record set in the next step.
+ 
+ <img width="628" alt="Screenshot 2022-03-12 at 4 28 22 PM" src="https://user-images.githubusercontent.com/53118271/158013614-5d0863e2-4baa-473b-b663-30f4026d941b.png">
 
-42. Now let’s add a new DNS record set for the wildcard of `*.apps.<cluster name>.<base domain>` to our private DNS zone. This DNS record is very important and is required for your ingress cluster operator to be able to listen and receive ingress traffic from the Master nodes. At this time, the console pods & authentication pods on the master nodes try to repeatedly connect with the ingress (router) pods to establish a legit route for their respective path endpoints. Because of the absence of this record set in step 37 above, some of the cluster operators remain unavailable.
-    1. Go to **‘Network Services’** > **‘Cloud DNS’**
+42. Now let’s add a new DNS record set for the wildcard of `*.apps.<cluster name>.<base domain>` to our private DNS zone. This DNS record is very important and is required for the ingress cluster operator to be able to listen and receive ingress traffic from the Master nodes. At this time, the console pods & authentication pods on the master nodes try to repeatedly connect with the ingress (router) pods to establish a legit route for their respective path endpoints. Because of the absence of this record set in step 37 above, some of the cluster operators remain unavailable.
+    1. Go to **‘Network Services’** > **‘Cloud DNS’**.
     2. Select the private DNS zone we created earlier.
     3. Click on **‘Add Record Set’**.
-    4. Enter the DNS name as `*.apps` . The clustername & basedomain should get auto-filled.
+    4. Enter the DNS name as `*.apps`. The clustername & basedomain should get auto-filled.
     5. Set TTL value to 1 and TTL Unit to minutes.
     6. Resource Record Type: A
     7. Routing Policy: Default Record Type
-    8. IP Address: 10.1.10.9 (This needs to be the IP of the loadbalancer you created in the previous step)
+    8. IP Address: 10.1.10.9 (This needs to be the IP of the loadbalancer created in the previous step).
     9. Click **‘Create’**.
- 
- <img width="628" alt="Screenshot 2022-03-12 at 4 28 22 PM" src="https://user-images.githubusercontent.com/53118271/158013614-5d0863e2-4baa-473b-b663-30f4026d941b.png">
+
  
 Once this is done, run a `watch oc get co`, and you should start seeing all your Cluster Operators becoming 'Available'.
  
@@ -577,10 +578,10 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
 
            <Bastion host Public IP> downloads-openshift-console.apps.hamzacluster.openshift.com alertmanager-main-openshift-monitoring.apps.hamzacluster.openshift.com grafana-openshift-monitoring.apps.hamzacluster.openshift.com prometheus-k8s-openshift-monitoring.apps.hamzacluster.openshift.com thanos-querier-openshift-monitoring.apps.hamzacluster.openshift.com console-openshift-console.apps.hamzacluster.openshift.com oauth-openshift.apps.hamzacluster.openshift.com
 
-    7. You should now be able to access the OCP console UI through your browser using `https://console-openshift-console.apps.<clustername>.<basedomain>` .
+    7. You should now be able to access the OCP console UI through your browser using `https://console-openshift-console.apps.<clustername>.<basedomain>`.
 
 
-Your OpenShift 4.10.3 cluster is now up and running. You can login to your UI using the the username of 'kubeadmin' and the password present at `install_dir/auth/kubeadmin-password`
+Your OpenShift 4.10.3 cluster is now up and running. You can login to your UI using the username of 'kubeadmin' and the password present in `install_dir/auth/kubeadmin-password`
 
 
 

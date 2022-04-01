@@ -89,7 +89,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 3. Create a Network from the GCP UI Console:
    1.	Go to **VPC Networks** > **Create VPC Networks**
-   2. Put in the appropriate network name. *ocp-network* is used in this exercise.
+   2. Put in the appropriate network name. *ocp-network* is used in this exercise. (NOTE : *if you want to use different names for the network & subnetworks, and different IP subnet ranges; please ensure you also edit the sample-install-config.yaml file accordingly so that it contains the correct network & subnetwork names as well as the correct IP subnet ranges.*)
    3. Add 2 new subnets within this network:
          1. For the Master Nodes & Bootstrap node:
              1. Name: master-subnet

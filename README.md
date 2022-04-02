@@ -228,7 +228,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 19. Export the GCP application credentials. This is the service account key that will be used for creating the remaining cluster components.
 
-        export GOOGLE_APPLICATION_CREDENTIALS=<path to your service account key json file>
+        export GOOGLE_APPLICATION_CREDENTIALS=<full path to your service account key json file>
         
 20. Create the manifest files for your OpenShift cluster.
 

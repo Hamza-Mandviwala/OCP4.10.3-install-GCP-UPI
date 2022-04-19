@@ -162,7 +162,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
          2. Access Scopes: Allow full access to all Cloud APIs (**This option is necessary as only then will you be able to execute the gcloud commands**)
    5. Firewall: Tick both checkboxes for allowing HTTP & HTTPS traffic.
    6.	For the Networking:
-         1. Network Tags: *'bastion'* (Ensure your set this tag, so that the firewall rule we created in step 4 above is applicable to this bastion host)
+         1. Network Tags: *'bastion'* (Ensure you set this tag, so that the firewall rule we created in step 4 above is applicable to this bastion host)
          2. Assign a hostname of your choice. 
          3. Connect the network interface to the ocp-network, and subnet of master-subnet. You can set both Primary Internal IP & External IP to ‘Ephemeral’.
          4.	Keep IP forwarding enabled.

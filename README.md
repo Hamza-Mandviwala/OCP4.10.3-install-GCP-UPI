@@ -37,7 +37,7 @@ Before we begin the bootstrap process, we will be creating some prerequisite inf
 
 After the bootstrap process is complete, we will be removing all the bootstrap components from the cluster. And then we will proceed with the creation of the worker nodes.
 
-Once we have our worker nodes up and running, we will configure a reverse proxy on the bastion host so that we can access the OCP Console UI locally on our browser. Finally, we will verify if all our cluster controllers are showing as ‘Available’.
+Once we have our worker nodes up and running, we will configure a reverse proxy on the bastion host so that we can access the OCP Console UI locally on our browser. Finally, we will verify if all our cluster operators are showing as ‘Available’.
 
 ## Final Architecture and Cluster Layout (Post Installation)
 

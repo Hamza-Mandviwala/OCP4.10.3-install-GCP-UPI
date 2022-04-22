@@ -87,7 +87,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
              2. Go to the **keys** tab.
              3. Click on **Add key** > **Create New Key** and follow the instructions to create and download the json key.
 
-**NOTE : Now that your project is created, please enable the [necessary APIs](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-enabling-api-services_installing-restricted-networks-gcp)  and also ensure you have the [necessary limits](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-gcp-user-infra.html#installation-gcp-limits_installing-gcp-user-infra) within your project.**
+**NOTE : Now that your project is created, please enable the [necessary APIs](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-enabling-api-services_installing-restricted-networks-gcp)  and also ensure you have the [necessary limits](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-gcp-user-infra.html#installation-gcp-limits_installing-gcp-user-infra) within your project. If you have newly created a GCP account, you might be able to edit your quotas only after 48 hours have passed by since account creation.**
 
 3. Create a Network from the GCP UI Console:
    1.	Go to **VPC Networks** > **Create VPC Networks**

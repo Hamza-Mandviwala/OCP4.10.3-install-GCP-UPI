@@ -95,14 +95,16 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
    3. Add 2 new subnets within this network:
          1. For the Master Nodes & Bootstrap node:
              1. Name: master-subnet
-             2. Subnet range: 10.1.10.0/24
-             3.	Private Google Access: On
-             4.	Flow Logs: Off
+             2. Region: asia-northeast1 (*you can choose any region of your choice. In this exercise , asia-northeast1 is the nearest to my location and provides all necessary resource limits*)
+             3. Subnet range: 10.1.10.0/24
+             4.	Private Google Access: On
+             5.	Flow Logs: Off
          2.	For the worker nodes:
              1.	Name: worker-subnet
-             2.	Subnet Range: 10.1.20.0/24
-             3.	Private Google Access: On
-             4.	Flow Logs: Off
+             2.	Region: asia-northeast1 (*you can choose any region of your choice. In this exercise , asia-northeast1 is the nearest to my location and provides all necessary resource limits*)
+             3.	Subnet Range: 10.1.20.0/24
+             4.	Private Google Access: On
+             5.	Flow Logs: Off
    4. For the Firewall rules, select all the 'allow' specific rules. Especially the rule that allows all communication between all the instances of the network. The rule name should be in the format of `<yournetworkname>-allow-custom`.
    5. Click **Create**.
 
@@ -123,7 +125,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
          11. Click **Create**.
 
 5. Create a ‘Cloud Router’ from the GCP console.
-   1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**.
+   1. Go to **‘Hybrid Connectivity’** > **‘Cloud Routers’**. (If *'Hybrid Connectivity'* option is not there in your left navigation menu, click on 'MORE PRODUCTS' option from the left navigation menu >  scroll down and you should find *'Hybrid Connectivity'* option. Click on the 'pin' icon so that it can be pinned to your pinned services list)
    2. Click on **‘Create Router’**.
    3.	Enter the relevant details:
          1. Name: ocp-router
@@ -133,7 +135,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
          5. Click **Create**..
 
 6. Create 2 Cloud NAT components connected to the router we created above, for both of our subnets created earlier.
-   1. Go to **‘Network Services’** > **‘Cloud NAT’**.
+   1. Go to **‘Network Services’** > **‘Cloud NAT’**. (If *'Network Services'* option is not there in your left navigation menu, click on 'MORE PRODUCTS' option from the left navigation menu >  scroll down and you should find *'Network Services'* option. Click on the 'pin' icon so that it can be pinned to your pinned services list)
    2. Enter the relevant details:
          1. Gateway Name: ocp-nat-master-gw
          2. Network: ocp-network
@@ -174,9 +176,9 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 ### OpenShift Installation 
 
-9. SSH into the bastion host from your local machine, and switch to the root user.
+9. SSH into the bastion host from your local machine, and switch to the root user. The *username* value is usually the local username that you use on your local machine. In my case, my local Macbook username is 'hamzawork' so I used 'hamzawork' as the username in the ssh command as well.
         
-       ssh -i ~/.ssh/id_rsa username@<Public IP of bastion host>
+       ssh -i ~/.ssh/id_rsa <username>@<Public IP of bastion host>
        sudo su -
 10. Copy over the downloaded json key (from step 2 above) to your bastion host, and save it by the name of `service-account-key.json`, as this is the service account key filename referenced in some of our commands later in this exercise. You can choose any name, just ensure you edit the commands accordingly.
 

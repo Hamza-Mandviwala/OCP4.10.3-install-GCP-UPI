@@ -61,8 +61,8 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 ## Prerequisites:
 1.	A GCP account.
-2.	The necessary APIs to be enabled as per the documentation [here](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-enabling-api-services_installing-restricted-networks-gcp).
-3.	Ensure you have [necessary limits/quotas](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-limits_installing-restricted-networks-gcp) available in the region you wish to deploy your cluster into. 
+2.	The necessary APIs to be enabled as per the documentation [here](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-enabling-api-services_installing-restricted-networks-gcp). APIs are enabled on a project basis so you will be able to enable these APIs only once our project is created in step 1 below.
+3.	Ensure you have [necessary limits/quotas](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-limits_installing-restricted-networks-gcp) available in the region you wish to deploy your cluster into. Once your project is created in step 1 below, please go ahead with ensuring the correct limits as mentioned in the docs.
 4.	Basic Linux administration skills.
 5.	Basic understanding of public cloud platforms like AWS, GCP, Azure.
 6.	Understanding of IP, routing, reverse proxy (recommended).

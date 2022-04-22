@@ -87,6 +87,8 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
              2. Go to the **keys** tab.
              3. Click on **Add key** > **Create New Key** and follow the instructions to create and download the json key.
 
+**NOTE : Once your project is created, please enable the [necessary APIs](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html#installation-gcp-enabling-api-services_installing-restricted-networks-gcp)  and also ensure you have the [necessary limits](https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-gcp-user-infra.html#installation-gcp-limits_installing-gcp-user-infra) within your project.**
+
 3. Create a Network from the GCP UI Console:
    1.	Go to **VPC Networks** > **Create VPC Networks**
    2. Put in the appropriate network name. *ocp-network* is used in this exercise. (NOTE : *if you want to use different names for the network & subnetworks, and different IP subnet ranges; please ensure you also edit the sample-install-config.yaml file accordingly so that it contains the correct network & subnetwork names as well as the correct IP subnet ranges.*)

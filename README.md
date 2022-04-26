@@ -440,7 +440,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
         gsutil rb gs://${INFRA_ID}-bootstrap-ignition
         gcloud deployment-manager deployments delete ${INFRA_ID}-bootstrap
 
-37. Now we are good to create we worker nodes. Note that if we run an `oc get co` command from the bastion host at this time, we will still see a few operators unavailable, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes by default, and only then will a route to the console be created, and eventually the authentication operator would also reach completion.
+37. Now we are good to create the worker nodes. Note that if we run an `oc get co` command from the bastion host at this time, we will still see a few operators as *'unavailable'*, typically the ingress, console, authentication, and a few other cluster operators. This is because they depend on some components which need to come up on the worker nodes. For example, the ingress cluster operator will deploy the router pods on the worker nodes by default, and only then will a route to the console be created, and eventually the authentication operator would also reach completion.
     1. Set the env variable for the worker ignition config file.
 
            export WORKER_IGNITION=`cat install_dir/worker.ign`

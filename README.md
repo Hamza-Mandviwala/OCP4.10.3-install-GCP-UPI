@@ -341,7 +341,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
            gsutil mb gs://${INFRA_ID}-bootstrap-ignition
            gsutil cp install_dir/bootstrap.ign gs://${INFRA_ID}-bootstrap-ignition/
            
-    2. Bucket to store RedHat Coreos file. Please take note that in the below commands, the filename of the rhcos image is `rhcos-4.10.3-x86_64-gcp.x86_64.tar.gz`. In your case the name might be different, so please replace the value accordingly. Also, the bucket names need to be unique, so in your case, you might be unable to use the bucket name as 'rhcosbucket', instead you can use any other arbitrary name of your choice, and just ensure you replace the the name correctly in any of the commands referencing the bucket name.
+    2. Bucket to store RedHat Coreos file. Please take note that in the below commands, the filename of the rhcos image is `rhcos-4.10.3-x86_64-gcp.x86_64.tar.gz`. In your case the name might be different, so please replace the value accordingly. Also, the bucket names need to be unique globally, so in your case, you might be unable to use the bucket name as *'rhcosbucket'*, instead you can use any other arbitrary name of your choice, and just ensure you replace the the name correctly in any of the commands referencing the bucket name.
 
            gsutil mb gs://rhcosbucket/
            gsutil cp rhcos-4.10.3-x86_64-gcp.x86_64.tar.gz gs://rhcosbucket/

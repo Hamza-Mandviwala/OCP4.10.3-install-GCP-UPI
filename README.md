@@ -430,8 +430,8 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
         gcloud compute instance-groups unmanaged add-instances ${INFRA_ID}-master-${ZONE_2}-instance-group --zone=${ZONE_2} --instances=${INFRA_ID}-master-2
         
 35. At this point we must now wait for the bootstrap process to complete. You can now monitor the bootstrap process:
-    1. ssh into your bootstrap node and run `journalctl -b -f -u release-image.service -u bootkube.service` . Upon bootstrap process completion, the output of this command should stop at a message that looks something like `systemd[1]: bootkube.service: Succeeded`. 
-    2. You can also ssh into the master nodes and run a `sudo crictl ps` to monitor the container creation of the various OCP components. Sometimes the kube-apiserver & etcd related components fluctuate and keep flapping. Do not panic and allow some time for these to stabilize. You can also perform a rolling reboot of your master nodes if you wish to.
+    1. ssh into your bootstrap node from your bastion host (`ssh -i ~/.ssh/id_rsa core@<ip of your bootstrap node>`) and run `journalctl -b -f -u release-image.service -u bootkube.service` . Upon bootstrap process completion, the output of this command should stop at a message that looks something like `systemd[1]: bootkube.service: Succeeded`. 
+    2. You can also ssh into the master nodes from your bastion host (`ssh -i ~/.ssh/id_rsa core@<ip of your master node>`) and run a `sudo crictl ps` to monitor the container creation of the various OCP components. Sometimes the kube-apiserver & etcd related components fluctuate and keep flapping. Do not panic and allow some time for these to stabilize. You can also perform a rolling reboot of your master nodes if you wish to.
 
 36. Once our bootstrap process completes, we can remove the bootstrap components:
 

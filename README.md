@@ -1,6 +1,6 @@
 # OpenShift 4.10.3 installation on GCP using UPI method
 
-This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10.3 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method.
+This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10.3 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method. It will help you understand what goes into deploying an OpenShift cluster from scratch all the way from setting up the infra components up to the actual OpenShift software installation.
 
 We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10.3 up and running seamlessly using the UPI method at no cost at all.
 
@@ -10,9 +10,11 @@ The procedure and steps described in this document have been taken mainly from t
 
 YouTube video demonstrating this exercise : https://www.youtube.com/watch?v=DdWCL4eE0vM
 
-Some changes have been made to the original steps described in the official docs. These are mainly the creation of networks, subnetworks, DNS zones, Cloud NATs – for which we will walk you through the steps to be performed on the UI, instead of the CLI. The idea is to understand how the cluster looks from the ground up.
+Some changes have been made to the original steps described in the official docs. These are mainly the creation of networks, subnetworks, DNS zones, Cloud NATs – for which we will walk you through the steps to be performed on the UI, instead of the CLI. The idea is to understand how the cluster looks from the ground up. 
 
 We will also be skipping the steps of the intermediate service accounts required for worker & master nodes, instead we will be using the same service account that we will be creating initially for authentication and authorization.
+
+*Do note that this is a private cluster deployment, and the cluster will only be accessible via the bastion host. This is why we do not use any public DNS in this installation, but only private DNS zone. We will however configure external UI access with the help of a reverse proxy.*
 
 ## Contents ##
 * [Basic Flow and Summary of deployment steps](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#basic-flow-and-summary-of-deployment-steps)

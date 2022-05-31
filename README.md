@@ -223,7 +223,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 17. Copy the sample-install-config.yaml file into the installation directory.
 
-        cp ~/OCP4.10.3-install-GCP-UPI/sample-install-config.yaml ~/install_dir/install-config.yaml
+        cp ~/openshift-4.10-install-GCP-UPI/sample-install-config.yaml ~/install_dir/install-config.yaml
         
 18. Edit the copied install-config.yaml as per your environment. The important changes are:
     1. Base Domain value (Needs to be the same as specified in your private DNS zone)
@@ -589,7 +589,7 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
     7. You should now be able to access the OCP console UI through your browser using `https://console-openshift-console.apps.<clustername>.<basedomain>`.
 
 
-Your OpenShift 4.10.3 cluster is now up and running. You can login to your UI using the username of 'kubeadmin' and the password present in `install_dir/auth/kubeadmin-password`
+Your OpenShift 4.10 cluster is now up and running. You can login to your UI using the username of 'kubeadmin' and the password present in `install_dir/auth/kubeadmin-password`
 
 
 

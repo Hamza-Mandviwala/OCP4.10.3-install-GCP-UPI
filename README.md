@@ -17,16 +17,16 @@ We will also be skipping the steps of the intermediate service accounts required
 *Do note that this is a private cluster deployment, and the cluster will only be accessible via the bastion host. This is why we do not use any public DNS in this installation, but only private DNS zone. We will however configure external UI access with the help of a reverse proxy.*
 
 ## Contents ##
-* [Basic Flow and Summary of deployment steps](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#basic-flow-and-summary-of-deployment-steps)
-* [Final Architecture and Cluster Layout (Post Installation)](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#final-architecture-and-cluster-layout-post-installation)
-* [Let’s Get Started!](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#lets-get-started)
-  * [Cluster Specs](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#cluster-specs)
-  * [Prerequisites](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#prerequisites)
-  * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#steps)
-    * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
-    * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)
-    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
-    * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
+* [Basic Flow and Summary of deployment steps](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#basic-flow-and-summary-of-deployment-steps)
+* [Final Architecture and Cluster Layout (Post Installation)](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#final-architecture-and-cluster-layout-post-installation)
+* [Let’s Get Started!](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#lets-get-started)
+  * [Cluster Specs](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#cluster-specs)
+  * [Prerequisites](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#prerequisites)
+  * [Steps:](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#steps)
+    * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
+    * [OpenShift Installation](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#openshift-installation)
+    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
+    * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
 
 
 ## Basic Flow and Summary of deployment steps

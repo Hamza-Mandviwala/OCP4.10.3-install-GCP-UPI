@@ -4,7 +4,7 @@ This guide is intended to walk you through a step-by-step procedure of deploying
 
 We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10 up and running seamlessly using the UPI method at no cost at all.
 
-This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)  process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
+This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#openshift-installation)  process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
 
 The procedure and steps described in this document have been taken mainly from the official RedHat documentation for OpenShift (https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html), with a few tweaks of my own.
 
@@ -74,7 +74,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
 
 ### Creating GCP Infra components
 
-1. Create a GCP project inside our GCP console. We have a project named ‘ocp-project’ created already, and this will be used to host the OCP 4.10.3 cluster.
+1. Create a GCP project inside our GCP console. We have a project named ‘ocp-project’ created already, and this will be used to host the OCP 4.10 cluster.
    1. Go to **IAM & Admin** > **Create a Project**.
    2. Enter the project name & organization and click on *Create*.
 

@@ -1,8 +1,8 @@
-# OpenShift 4.10.3 installation on GCP using UPI method
+# OpenShift 4.10 installation on GCP using UPI method
 
-This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10.3 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method. It will help you understand what goes into deploying an OpenShift cluster from scratch all the way from setting up the infra components up to the actual OpenShift software installation.
+This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method. It will help you understand what goes into deploying an OpenShift cluster from scratch all the way from setting up the infra components up to the actual OpenShift software installation.
 
-We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10.3 up and running seamlessly using the UPI method at no cost at all.
+We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10 up and running seamlessly using the UPI method at no cost at all.
 
 This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)  process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
 
@@ -33,7 +33,7 @@ We will also be skipping the steps of the intermediate service accounts required
 
 <img width="1792" alt="flowdiagram" src="https://user-images.githubusercontent.com/53118271/157832070-351606fa-92fd-45b7-96a2-e3fa7d83ddb0.png">
 
-The above diagram illustrates the basic flow in which we will be deploying our OCP 4.10.3 cluster on GCP. We first create a bastion host, and from that host, we will be running all the necessary commands to setup the bootstrap node, followed by the Master nodes, and finally the worker nodes in a different subnet.
+The above diagram illustrates the basic flow in which we will be deploying our OCP 4.10 cluster on GCP. We first create a bastion host, and from that host, we will be running all the necessary commands to setup the bootstrap node, followed by the Master nodes, and finally the worker nodes in a different subnet.
 
 Before we begin the bootstrap process, we will be creating some prerequisite infrastructure components like network, subnetworks, IAM service account, IAM Project, Private DNS zone, Load balancers, Cloud NATs & a Cloud Router.
 

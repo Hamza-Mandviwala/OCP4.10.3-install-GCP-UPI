@@ -1,9 +1,9 @@
 # OpenShift 4.10 installation on GCP using UPI method
 
 **UPDATE : This exercise helps implement almost all versions of 4.10.x on GCP. That being said, as of 31st May 2022, below details have been updated within this GitHub Project:
-    - GitHub Project name changed from 'OCP-4.10.3-install-GCP-UPI' to 'openshift-4.10-install-GCP-UPI'. This means all corresponding URLs and sub URLs also have been automatically changed to reflect the correct repository naming (including the `git clone` command)
-    - Likewise, any other commands & instructions in the steps that include the keywords '4.10.3' have also been replaced with '4.10'.
-    - The [YouTube video](https://www.youtube.com/watch?v=DdWCL4eE0vM) demonstrating this exercise remains the same, and still focuses on the installation of version 4.10.3 on GCP.**
+    1. GitHub Project name changed from 'OCP-4.10.3-install-GCP-UPI' to 'openshift-4.10-install-GCP-UPI'. This means all corresponding URLs and sub URLs also have been automatically changed to reflect the correct repository naming (including the `git clone` command)
+    2. Likewise, any other commands & instructions in the steps that include the keywords '4.10.3' have also been replaced with '4.10'.
+    3. The [YouTube video](https://www.youtube.com/watch?v=DdWCL4eE0vM) demonstrating this exercise remains the same, and still focuses on the installation of version 4.10.3 on GCP.**
  
 This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method. It will help you understand what goes into deploying an OpenShift cluster from scratch all the way from setting up the infra components up to the actual OpenShift software installation.
 

@@ -211,11 +211,11 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
       
 15. Clone this repository. This contains the necessary .py files required to build the cluster components like load balancers & VM instances.
 
-        git clone https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI.git
+        git clone https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI.git
         
     Also let's copy the Deployment Manager Templates (i.e the .py files, to the current working directory)
     
-        cp ~/OCP4.10.3-install-GCP-UPI/deployment_manager_templates/* ~/ 
+        cp ~/openshift-4.10-install-GCP-UPI/deployment_manager_templates/* ~/ 
         
 16. Create an installation directory which will be used to generate the manifests & ignition config files.
 

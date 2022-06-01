@@ -1,12 +1,12 @@
 # OpenShift 4.10 installation on GCP using UPI method
 
-*UPDATE (31st May 2022) : Although this exercise was demonstrated using OpenShift, version 4.10.3, this GitHub Project can also be used as guide for installing almost any 4.10.x version of OpenShift on GCP using the UPI Method.*
+*UPDATE (31st May 2022) : The exercise demonstrated in this GitHub project uses OpenShift version 4.10.3. However, it can also be used as a guide for installing almost any 4.10.x version of OpenShift on GCP using the UPI Method.*
 
 This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method. It will help you understand what goes into deploying an OpenShift cluster from scratch all the way from setting up the infra components up to the actual OpenShift software installation.
 
 We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10 up and running seamlessly using the UPI method at no cost at all.
 
-This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#openshift-installation)  process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
+This guide also covers a lot of basics including the creation of basic GCP components like projects, networks etc. So, if you are comfortable with provisioning your infrastructure components yourself, feel free to skip over to the [openshift installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)  process directly. It would still be recommended to follow through this document entirely to avoid any unexpected issues.
 
 The procedure and steps described in this document have been taken mainly from the official RedHat documentation for OpenShift (https://docs.openshift.com/container-platform/4.10/installing/installing_gcp/installing-restricted-networks-gcp.html), with a few tweaks of my own.
 
@@ -19,16 +19,16 @@ We will also be skipping the steps of the intermediate service accounts required
 *Do note that this is a private cluster deployment, and the cluster will only be accessible via the bastion host. This is why we do not use any public DNS in this installation, but only private DNS zone. We will however configure external UI access with the help of a reverse proxy.*
 
 ## Contents ##
-* [Basic Flow and Summary of deployment steps](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#basic-flow-and-summary-of-deployment-steps)
-* [Final Architecture and Cluster Layout (Post Installation)](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#final-architecture-and-cluster-layout-post-installation)
-* [Let’s Get Started!](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#lets-get-started)
-  * [Cluster Specs](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#cluster-specs)
-  * [Prerequisites](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#prerequisites)
-  * [Steps:](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#steps)
-    * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
-    * [OpenShift Installation](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#openshift-installation)
-    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
-    * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/openshift-4.10-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
+* [Basic Flow and Summary of deployment steps](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#basic-flow-and-summary-of-deployment-steps)
+* [Final Architecture and Cluster Layout (Post Installation)](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#final-architecture-and-cluster-layout-post-installation)
+* [Let’s Get Started!](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#lets-get-started)
+  * [Cluster Specs](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#cluster-specs)
+  * [Prerequisites](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#prerequisites)
+  * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#steps)
+    * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-gcp-infra-components)
+    * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#openshift-installation)
+    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
+    * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
 
 
 ## Basic Flow and Summary of deployment steps

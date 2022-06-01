@@ -1,5 +1,7 @@
 # OpenShift 4.10 installation on GCP using UPI method
 
+*UPDATE (31st May 2022) : This GitHub Project can also be used as guide for installing almost any 4.10.x version of OpenShift on GCP using UPI Method*
+
 This guide is intended to walk you through a step-by-step procedure of deploying a 5 node (3 Masters & 2 Workers) OCP 4.10 cluster on GCP using the User-Provisioned-Infrastructure (UPI) method. It will help you understand what goes into deploying an OpenShift cluster from scratch all the way from setting up the infra components up to the actual OpenShift software installation.
 
 We have selected GCP as our infrastructure platform, mainly because it offers some free credits upon account creation to get yourself familiarized with the platform. This is more than enough to get our RedHat OpenShift Container Platform 4.10 up and running seamlessly using the UPI method at no cost at all.

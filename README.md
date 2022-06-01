@@ -24,7 +24,7 @@ We will also be skipping the steps of the intermediate service accounts required
 * [Let’s Get Started!](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#lets-get-started)
   * [Cluster Specs](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#cluster-specs)
   * [Prerequisites](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#prerequisites)
-  * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/edit/blob/README.md#steps)
+  * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#steps)
     * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#creating-gcp-infra-components)
     * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#openshift-installation)
     * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)

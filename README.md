@@ -27,7 +27,7 @@ We will also be skipping the steps of the intermediate service accounts required
   * [Steps:](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#steps)
     * [Creating GCP Infra components](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#creating-gcp-infra-components)
     * [OpenShift Installation](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#openshift-installation)
-    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#creating-a-second-internal-loadbalancer-for-worker-plane-traffic)
+    * [Creating a second Internal Load balancer for worker plane traffic](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#creating-a-second-internal-load-balancer-for-worker-plane-traffic)
     * [Configuring a Reverse Proxy for external UI access](https://github.com/Hamza-Mandviwala/OCP4.10.3-install-GCP-UPI/blob/main/README.md#configuring-a-reverse-proxy-for-external-ui-access)
 
 

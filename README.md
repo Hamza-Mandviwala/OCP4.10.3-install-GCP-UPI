@@ -593,6 +593,12 @@ Once this is done, run a `watch oc get co`, and you should start seeing all your
 
 Your OpenShift 4.10 cluster is now up and running. You can login to your UI using the username of 'kubeadmin' and the password present in `install_dir/auth/kubeadmin-password`
 
+## Helpful links:
+
+1. Deploying a [simple nginxdemo app on minikube](https://github.com/Hamza-Mandviwala/simple-nginx-demo-app-minikube)
+2. Understanding a [Two-tier Kubernetes application architecture on AWS](https://github.com/Hamza-Mandviwala/two-tier-kubernetes-app-aws-architecture)
+
+
 
 
 

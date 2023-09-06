@@ -1,6 +1,6 @@
 # OpenShift 4.10 installation on GCP using UPI method
 
-*UPDATE (6th September 2022) : Recently, you might notice gcloud commands failing due to permission errors, this is because the gcloud CLI now requires you to login using the `gcloud auth` command. The step no.19 in this exercise has been updated to reflect the same.*
+*UPDATE (6th September 2023) : Recently, you might notice gcloud commands failing due to permission errors, this is because the gcloud CLI now requires you to login using the `gcloud auth` command. The step no.19 in this exercise has been updated to reflect the same.*
 
 *UPDATE (14th September 2022) : The exercise demonstrated in this GitHub project uses OpenShift version 4.10.3. However, it can also be used as a guide for installing almost any 4.10.x as well as 4.11.1 version of OpenShift on GCP using the UPI Method. Tested at my end, and it works perfectly on 4.11.1 as well. Some GCP UI changes might be seen now, however these are very minor and shouldn't have much impact on the installation flow.*
 

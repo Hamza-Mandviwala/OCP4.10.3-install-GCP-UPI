@@ -482,7 +482,7 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
                service_account_email: '${WORKER_SERVICE_ACCOUNT}' 
                ignition: '${WORKER_IGNITION}' 
            EOF
-
+        Note: If you wish to deploy workers with 2 interfaces, replace the `type` parameter value with `07_worker_with_2_interfaces.py` AND add an extra property field named `additional_subnet` and set it's value to the output of the command `gcloud compute networks subnets describe <secondary_network_name> --region=${REGION} --format json | jq -r .selfLink` where `<secondary_network_name>` is the name of another VPC network to which you wish to attach your VMs to. 
      3. Run the command to create the worker nodes.
 
             gcloud deployment-manager deployments create ${INFRA_ID}-worker --config 06_worker.yaml

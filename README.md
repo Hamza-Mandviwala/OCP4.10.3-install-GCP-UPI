@@ -1,6 +1,6 @@
 # OpenShift 4.10 installation on GCP using UPI method
 
-*UPDATE (27th July 2023) : Committed a new deployment configuration file named `07_worker_with_2_interfaces.py` that allows you to deploy workers with 2 network interfaces. Usefule for getting a good hands on with attaching multiple networks to your OCP clusters for OpenShift Virtualization. Also, GCP has made some UI changes, and the "Hybrid Connectivity" section seems to have been replaced with the name "Network Connectivity"*
+*UPDATE (27th July 2023) : Committed a new deployment configuration file named `07_worker_with_2_interfaces.py` that allows you to deploy workers with 2 network interfaces. Useful for getting a good hands on with attaching multiple networks to your OCP clusters for OpenShift Virtualization. Also, GCP has made some UI changes, and the "Hybrid Connectivity" section seems to have been replaced with the name "Network Connectivity"*
 
 *UPDATE (6th September 2023) : Recently, you might notice gcloud commands failing due to permission errors, this is because the gcloud CLI now requires you to login using the `gcloud auth` command. The step no.19 in this exercise has been updated to reflect the same.*
 

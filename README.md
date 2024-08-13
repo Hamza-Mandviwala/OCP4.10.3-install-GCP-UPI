@@ -286,11 +286,11 @@ Once we have our worker nodes up and running, we will configure a reverse proxy 
         export NETWORK_CIDR='10.1.0.0/16'
         export MASTER_SUBNET_CIDR='10.1.10.0/24'
         export WORKER_SUBNET_CIDR='10.1.20.0/24'
-        export KUBECONFIG=/root/install_dir/auth/kubeconfig 
-        export CLUSTER_NAME=`jq -r .clusterName /root/install_dir/metadata.json`
-        export INFRA_ID=`jq -r .infraID /root/install_dir/metadata.json`
-        export PROJECT_NAME=`jq -r .gcp.projectID /root/install_dir/metadata.json`
-        export REGION=`jq -r .gcp.region /root/install_dir/metadata.json`
+        export KUBECONFIG=~/install_dir/auth/kubeconfig 
+        export CLUSTER_NAME=`jq -r .clusterName ~/install_dir/metadata.json`
+        export INFRA_ID=`jq -r .infraID ~/install_dir/metadata.json`
+        export PROJECT_NAME=`jq -r .gcp.projectID ~/install_dir/metadata.json`
+        export REGION=`jq -r .gcp.region ~/install_dir/metadata.json`
         export CLUSTER_NETWORK=(`gcloud compute networks describe ${NETWORK} --format json | jq -r .selfLink`)
         export CONTROL_SUBNET=(`gcloud compute networks subnets describe ${MASTER_SUBNET} --region=${REGION} --format json | jq -r .selfLink`)
         export COMPUTE_SUBNET=(`gcloud compute networks subnets describe ${WORKER_SUBNET} --region=${REGION} --format json | jq -r .selfLink`)
